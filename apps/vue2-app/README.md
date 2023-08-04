@@ -11,7 +11,7 @@ pnpm
 
 ## Quick start
 ```
-git clone git@github.com:xinlei3166/vite-vue2-template.git
+git clone https://github.com/xinlei3166/vite-vue2-template.git
 ```
 
 ## Project setup
