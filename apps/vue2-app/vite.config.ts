@@ -62,8 +62,7 @@ export default ({ mode, command }) => {
         defaultLocale: false
       })
     ],
-    // base: env.VITE_APP_BASE || '/',
-    base: './',
+    base: env.VITE_APP_BASE || '/',
     resolve: {
       alias: {
         '@': path.resolve(__dirname, 'src'),

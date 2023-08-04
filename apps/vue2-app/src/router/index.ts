@@ -8,6 +8,7 @@ import { useMenuStore } from '@/store/menu'
 
 export const createRouter = () => {
   return new VueRouter({
+    base: import.meta.env.BASE_URL,
     mode: 'history',
     // mode: 'hash',
     routes: [...home, ...routes, ...common]
