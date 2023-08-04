@@ -1,1 +1,0 @@
-import{d as s,y as _,n as r}from"./index-30228a89.js";const u=s({setup(){return{number:_("number")}}});var a=function(){var e=this,n=e._self._c;return e._self._setupProxy,n("div",[n("div",{staticClass:"title"},[e._v("子组件")]),n("div",{staticClass:"title"},[e._v("当前结果："+e._s(e.number))])])},l=[],c=r(u,a,l,!1,null,"a4acffe0",null,null);const o=c.exports;export{o as default};

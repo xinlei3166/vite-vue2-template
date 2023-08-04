@@ -1,1 +1,0 @@
-import{d as r,n as t}from"./index-30228a89.js";const o=r({__name:"Router",setup(_){return{__sfc:!0}}});var s=function(){var e=this,n=e._self._c;return e._self._setupProxy,n("router-view")},a=[],u=t(o,s,a,!1,null,"baa50c63",null,null);const l=u.exports;export{l as default};
