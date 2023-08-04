@@ -44,7 +44,7 @@ import Setting from './Setting.vue'
 import Logo from './Logo.vue'
 import { useTheme } from '@packages/hooks'
 
-const isDev = import.meta.env.MODE === 'development'
+const isDev = ['development', 'github'].includes(import.meta.env.MODE)
 const router = useRouter()
 const theme = useTheme()
 const layout = computed(() => window.self === window.top && !window.__POWERED_BY_WUJIE__)
