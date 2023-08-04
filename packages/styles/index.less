@@ -1,0 +1,179 @@
+@import './antd';
+
+// required
+.label-required::before {
+  content: '*';
+  color: @error-color;
+  margin-right: 4px;
+}
+
+// overflow
+.overflow-ellipsis {
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+
+// column-mark
+.column-tooltip {
+  .ivu-tooltip-content {
+    max-height: 400px;
+    overflow-y: auto;
+  }
+}
+
+.column-mark {
+  display: inline-block;
+  width: 70px;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+
+// dropdown-icon
+.dropdown-icon {
+  font-size: 10px;
+  vertical-align: baseline;
+}
+
+// card
+.g-card {
+  display: flex;
+  background: #fff;
+  border-radius: 4px;
+  font-size: 14px;
+  transition: all 0.2s ease-in-out;
+}
+
+// readonly-text
+.readonly-text {
+  .ivu-input[disabled] {
+    background-color: transparent;
+    opacity: 1;
+    cursor: default;
+    color: @text-color;
+  }
+}
+
+// empty-style
+.empty-style {
+  text-align: center;
+  color: @text-color-secondary;
+
+  .ant-empty-image {
+    margin-bottom: 8px;
+  }
+}
+
+// nprogress style
+#nprogress .bar {
+  background: @primary-color;
+}
+
+// reset-btn
+.reset-btn {
+  color: #fff !important;
+  background-color: @warning-color;
+  border-color: @warning-color;
+  text-shadow: 0 -1px 0 #0000001E;
+  box-shadow: 0 2px 0 #0000000C;
+
+  &:hover, &:focus, &:active {
+    text-decoration: none;
+  }
+
+  &:hover, &:focus {
+    background-color: @warning-color-hover;
+    border-color: @warning-color-hover;
+  }
+
+  &:focus, &:active {
+    outline: 0;
+  }
+
+  &:active {
+    background-color: @warning-color-active;
+    border-color: @warning-color-active;
+    box-shadow: none;
+    outline: 0;
+  }
+}
+
+// text-btn
+.text-primary {
+  color: @primary-color;
+}
+
+.text-success {
+  color: @success-color;
+}
+
+.text-warning {
+  color: @warning-color;
+}
+
+.text-error {
+  color: @error-color;
+}
+
+.text-btn-success {
+  cursor: pointer;
+  color: @success-color;
+
+  &:hover {
+    color: #28b324;
+  }
+}
+
+.text-btn-error {
+  cursor: pointer;
+  color: @error-color;
+
+  &:hover {
+    color: #ff7875;
+  }
+}
+
+.text-btn-disabled {
+  cursor: not-allowed;
+  color: @disabled-color;
+}
+
+.text-btn, .phone-icon, .im-icon {
+  color: @primary-color;
+  cursor: pointer;
+}
+
+.text-btn:hover, .phone-icon:hover {
+  color: @primary-color-hover;
+}
+
+.text-btn + .text-btn {
+  margin-left: 8px;
+}
+
+.hover-btn {
+  cursor: pointer;
+
+  &:hover {
+    color: @primary-color !important;
+  }
+}
+
+.phone-icon {
+  font-size: 20px;
+  margin-left: 8px;
+}
+
+.text-color {
+  color: @text-color;
+}
+
+.text-white {
+  color: #fff;
+}
+
+.text-light {
+  //color: @text-color-secondary;
+  color: @text-color-light;
+}
