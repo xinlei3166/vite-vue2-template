@@ -11,7 +11,7 @@ export const createRouter = () => {
     base: import.meta.env.BASE_URL,
     mode: 'history',
     // mode: 'hash',
-    routes: [...home, ...routes, ...common]
+    routes: __DYNAMIC_MENU__ ? [...home, ...common] : [...home, ...routes, ...common]
   })
 }
 
