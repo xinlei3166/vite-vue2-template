@@ -32,8 +32,8 @@
     "@packages/lib": "workspace:*",
     "@packages/plugins": "workspace:*",
     "@packages/styles": "workspace:*",
-    "@packages/utils": "workspace:*",
-    "@packages/types": "workspace:*"
+    "@packages/types": "workspace:*",
+    "@packages/utils": "workspace:*"
   },
   "devDependencies": {}
 }
