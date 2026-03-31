@@ -26,4 +26,4 @@ const pureRequests = useRequests({ baseURL, errorHandler, noRefreshToken: true }
 export const refreshTokenApi = (data?: Request) =>
   pureRequests.post('/user/refresh_token', { refresh_token: data?.refreshToken })
 
-export const requests = useRequests({ baseURL, errorHandler, noRefreshToken: true })
+export const requests = useRequests({ baseURL, errorHandler, refreshTokenApi })
