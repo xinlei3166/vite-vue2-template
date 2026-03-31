@@ -40,8 +40,8 @@
 */
 // @ts/nocheck
 
-import { onBeforeUnmount } from 'vue'
 import { Modal } from 'ant-design-vue'
+import { onBeforeUnmount } from 'vue'
 import { websocketMsg } from '@packages/types/enums'
 import { to, removeToken } from '@packages/utils'
 import router from '@/router'
@@ -275,13 +275,11 @@ class WsFns {
   }
 
   // 获取印章数据
-  // eslint-disable-next-line camelcase
   WS_GetSealData() {
     const req = '{"function":"WS_GetSealData"}'
     this.instance.send(req)
   }
 
-  // eslint-disable-next-line camelcase
   WS_GetSealImage() {
     const req = '{"function":"WS_GetSealImage"}'
     this.instance.send(req)
@@ -361,7 +359,6 @@ class MySocket {
   }
 
   open(config: SockedConfig) {
-    // eslint-disable-next-line @typescript-eslint/no-this-alias
     const _this = this
     this.config = config
     if ('WebSocket' in window) {
@@ -394,7 +391,6 @@ class MySocket {
   }
 
   send(name: string, params?: any) {
-    // eslint-disable-next-line @typescript-eslint/no-this-alias
     const _this = this
     const { notErrModules, socketErrShow } = this.config
 

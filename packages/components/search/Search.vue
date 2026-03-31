@@ -139,11 +139,17 @@
 
 <script lang="ts">
 import { defineComponent } from 'vue'
-import { props } from './props'
 import { typeOf } from '@packages/utils'
+import { props } from './props'
 
-// eslint-disable-next-line
-type SearchType = 'input' | 'input-number' | 'select' | 'tree-select' | 'cascader' | 'date-picker' | 'range-picker'
+type SearchType =
+  | 'input'
+  | 'input-number'
+  | 'select'
+  | 'tree-select'
+  | 'cascader'
+  | 'date-picker'
+  | 'range-picker'
 
 export default defineComponent({
   inheritAttrs: false,

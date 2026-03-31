@@ -1,24 +1,28 @@
 {
   "name": "vite-vue2-template",
   "version": "1.0.1",
-  "description": "vite-vue2-template",
   "private": true,
+  "description": "vite-vue2-template",
+  "keywords": [
+    "ant-design-vue",
+    "monorepo",
+    "typescript",
+    "vue",
+    "vue2"
+  ],
+  "license": "MIT",
+  "author": "君惜",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/xinlei3166/vite-vue2-template.git"
   },
-  "keywords": [
-    "vue",
-    "vue2",
-    "ant-design-vue",
-    "typescript",
-    "monorepo"
-  ],
-  "author": "君惜",
-  "license": "MIT",
   "scripts": {
     "preinstall": "npx only-allow pnpm",
     "prepare": "simple-git-hooks",
+    "format": "oxfmt",
+    "format:check": "oxfmt --check",
+    "lint": "oxlint",
+    "lint:fix": "oxlint --fix",
     "release": "yunque-release --skipBuild",
     "changelog": "conventional-changelog -p angular -i CHANGELOG.md -s -r 0"
   },
@@ -47,7 +51,7 @@
     "pinia-plugin-persist": "^1.0.0",
     "qs": "^6.11.2",
     "vue": "^2.7.15",
-    "vue-demi": "^0.14.6",
+    "vue-demi": "^0.14.10",
     "vue-echarts": "^6.6.1",
     "vue-router": "^3.6.5",
     "vuedraggable": "^2.24.3",
@@ -59,8 +63,6 @@
     "@types/node": "^20.8.8",
     "@types/nprogress": "^0.2.2",
     "@types/qs": "^6.9.9",
-    "@typescript-eslint/eslint-plugin": "^6.9.0",
-    "@typescript-eslint/parser": "^6.9.0",
     "@unocss/postcss": "^0.57.1",
     "@unocss/preset-rem-to-px": "^0.57.1",
     "@vitejs/plugin-vue2": "^2.2.0",
@@ -71,18 +73,15 @@
     "consola": "^3.2.3",
     "conventional-changelog-cli": "^4.1.0",
     "cross-env": "^7.0.3",
-    "eslint": "^8.52.0",
-    "eslint-config-prettier": "^9.0.0",
-    "eslint-plugin-prettier": "^5.0.1",
-    "eslint-plugin-vue": "^9.17.0",
     "less": "^3.9.0",
     "less-loader": "^6.0.0",
     "lint-staged": "^15.0.2",
     "mockjs": "^1.1.0",
     "npm-run-all": "^4.1.5",
+    "oxfmt": "^0.42.0",
+    "oxlint": "^1.57.0",
     "picocolors": "latest",
     "postcss": "^8.4.31",
-    "prettier": "^3.0.3",
     "simple-git-hooks": "latest",
     "ssh2-sftp-client": "^9.1.0",
     "tsx": "latest",
@@ -92,25 +91,24 @@
     "unplugin-vue-components": "^0.25.2",
     "vite": "^4.5.0",
     "vite-plugin-html": "^3.2.0",
-    "vite-plugin-style-import": "^2.0.0",
-    "vue-eslint-parser": "^9.3.2"
+    "vite-plugin-style-import": "^2.0.0"
   },
   "simple-git-hooks": {
     "pre-commit": "pnpm exec lint-staged --concurrent false",
     "commit-msg": "pnpm exec tsx scripts/verifyCommit.ts $1"
   },
   "lint-staged": {
-    "*.{js,jsx,ts,tsx,vue}": [
-      "eslint --fix"
+    "*": [
+      "oxlint --fix",
+      "oxfmt --no-error-on-unmatched-pattern"
     ]
   },
   "pnpm": {
     "peerDependencyRules": {
-      "ignoreMissing": [
-        "webpack",
-        "umi",
-        "vite"
-      ]
-    }
+      "ignoreMissing": []
+    },
+    "onlyBuiltDependencies": [
+      "vue-demi"
+    ]
   }
 }
