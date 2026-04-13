@@ -4,15 +4,14 @@
     :model="search"
     label-width="42px"
     :show-reset-btn="true"
-    style="margin-bottom: 20px"
+    style="margin-bottom: 16px"
     @search="onSearch"
     @reset="onReset"
   >
     <template #name6>
       <a-select
         v-model="search.name6"
-        class="select"
-        style="width: 240px"
+        class="w-full"
         :allow-clear="true"
         placeholder="请选择课性别"
       >
@@ -47,8 +46,8 @@
 
 <script lang="ts">
 import { defineComponent, onBeforeMount, reactive, computed } from 'vue'
-import type { Pagination } from '@packages/types'
 import { useData } from '@packages/hooks'
+import type { Pagination } from '@packages/types'
 import { getData } from '@/api'
 import { columns } from './columns'
 
@@ -79,17 +78,17 @@ export default defineComponent({
       name10: undefined
     })
 
-    async function onReset() {
+    const onReset = async () => {
       Object.keys(search).forEach(key => (search[key] = undefined))
       pagination.current = 1
       await init()
     }
 
-    function onEdit() {
+    const onEdit = () => {
       window.open('https://baidu.com')
     }
 
-    function onPreview() {
+    const onPreview = () => {
       window.open('https://baidu.com')
     }
 
@@ -115,7 +114,7 @@ export default defineComponent({
 }
 
 .btn {
-  color: #1890ff;
+  color: theme('colors.primary');
   margin-right: 10px;
   cursor: pointer;
 }

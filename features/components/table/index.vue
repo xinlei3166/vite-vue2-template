@@ -11,8 +11,7 @@
       <template #name6>
         <a-select
           v-model="search.name6"
-          class="select"
-          style="width: 200px"
+          class="w-full"
           :allow-clear="true"
           placeholder="请选择性别"
         >
@@ -42,8 +41,8 @@
 
 <script setup lang="ts">
 import { onBeforeMount, computed, reactive } from 'vue'
-import type { Pagination } from '@packages/types'
 import { useData } from '@packages/hooks'
+import type { Pagination } from '@packages/types'
 import { getList } from '@/api'
 import { columns, tableColumns } from './columns'
 
@@ -70,16 +69,16 @@ const search = reactive<Record<string, any>>({
   name10: undefined
 })
 
-async function onReset() {
+const onReset = async () => {
   Object.keys(search).forEach(key => (search[key] = undefined))
   await onSearch()
 }
 
-function onEdit() {
+const onEdit = () => {
   window.open('https://baidu.com')
 }
 
-function onPreview() {
+const onPreview = () => {
   window.open('https://baidu.com')
 }
 </script>

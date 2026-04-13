@@ -28,8 +28,8 @@
 
 <script setup lang="ts">
 import { computed, onBeforeMount } from 'vue'
-import type { Pagination } from '@packages/types'
 import { useData } from '@packages/hooks'
+import type { Pagination } from '@packages/types'
 import { getList } from '@/api'
 
 const params = computed(() => ({}))
@@ -41,11 +41,11 @@ onBeforeMount(async () => {
   await init()
 })
 
-function onEdit() {
+const onEdit = () => {
   window.open('https://baidu.com')
 }
 
-function onPreview() {
+const onPreview = () => {
   window.open('https://baidu.com')
 }
 </script>
