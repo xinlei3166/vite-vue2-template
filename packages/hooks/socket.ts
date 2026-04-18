@@ -40,7 +40,7 @@
 */
 // @ts/nocheck
 
-import { Modal } from 'ant-design-vue'
+import { Dialog, MessagePlugin } from 'tdesign-vue'
 import { onBeforeUnmount } from 'vue'
 import { websocketMsg } from '@packages/types/enums'
 import { to, removeToken } from '@packages/utils'
@@ -326,7 +326,7 @@ class MySocket {
 
   logout(key = 'deviceOut') {
     this.config.socketErrShow &&
-      message.error({
+      MessagePlugin.error({
         content: websocketMsg[key],
         duration: 4
       })
@@ -351,9 +351,10 @@ class MySocket {
       console.log('websocket__err', e)
       this.globalErr && this.globalErr(e)
       this.config.socketErrShow &&
-        Modal.error({
-          title: websocketMsg.errTitle,
-          content: websocketMsg.socketCloseErr
+        Dialog.alert({
+          theme: 'danger',
+          header: websocketMsg.errTitle,
+          body: websocketMsg.socketCloseErr
         })
     })
   }
@@ -378,9 +379,10 @@ class MySocket {
       })
     } else {
       this.config.socketErrShow &&
-        Modal.error({
-          title: websocketMsg.errTitle,
-          content: websocketMsg.notSupport
+        Dialog.alert({
+          theme: 'danger',
+          header: websocketMsg.errTitle,
+          body: websocketMsg.notSupport
         })
     }
   }
@@ -407,9 +409,10 @@ class MySocket {
             reject(newData)
             if (!(notErrModules as string[]).includes(newData.function)) {
               socketErrShow &&
-                Modal.error({
-                  title: websocketMsg.errTitle,
-                  content: newData.err
+                Dialog.alert({
+                  theme: 'danger',
+                  header: websocketMsg.errTitle,
+                  body: newData.err
                 })
             }
           }
@@ -422,9 +425,10 @@ class MySocket {
       } else {
         console.log('isConnect__err')
         socketErrShow &&
-          Modal.error({
-            title: websocketMsg.errTitle,
-            content: websocketMsg.socketCloseErr
+          Dialog.alert({
+            theme: 'danger',
+            header: websocketMsg.errTitle,
+            body: websocketMsg.socketCloseErr
           })
       }
     })
@@ -465,9 +469,10 @@ export default function socket(config?: SockedConfig) {
     //   return [null, version]
     // } else {
     //   config?.socketErrShow &&
-    //     Modal.error({
-    //       title: websocketMsg.errTitle,
-    //       content: websocketMsg.VersionErr
+    //     Dialog.alert({
+    //       theme: 'danger',
+    //       header: websocketMsg.errTitle,
+    //       body: websocketMsg.VersionErr
     //     })
     //   return [true, null]
     // }

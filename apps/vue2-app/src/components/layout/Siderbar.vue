@@ -1,5 +1,5 @@
 <template>
-  <a-layout-sider
+  <t-layout-sider
     v-model="theme.collapsed"
     :class="['layout-sider', { 'layout-sider-mix': theme.layout === 'mix' }]"
     :theme="theme.theme"
@@ -14,7 +14,7 @@
     </template>
     <Logo v-if="theme.layout !== 'mix'" />
     <div class="layout-menu-wrap">
-      <a-menu
+      <t-menu
         v-model="menuState.selectedKeys"
         :open-keys="menuState.openKeys"
         class="sider-menu"
@@ -23,43 +23,43 @@
         @openChange="onOpenChange"
       >
         <template v-for="route in routes">
-          <a-menu-item v-if="route.meta.link && !route.meta.hidden" :key="route.name">
+          <t-menu-item v-if="route.meta.link && !route.meta.hidden" :key="route.name">
             <router-link class="menu-item-link" :to="{ name: route.children[0]?.name }">
               <icon :type="route.meta.icon" class="menu-item-icon"></icon>
               <span class="menu-item-title">{{ route.meta.title }}</span>
             </router-link>
-          </a-menu-item>
-          <a-sub-menu v-else-if="!route.meta.hidden" :key="route.name">
+          </t-menu-item>
+          <t-sub-menu v-else-if="!route.meta.hidden" :key="route.name">
             <template #title>
               <icon :type="route.meta.icon" class="menu-item-icon"></icon>
               <span class="menu-item-title">{{ route.meta.title }}</span>
             </template>
             <template v-for="sub in route.children">
-              <a-menu-item v-if="!sub.meta.hidden" :key="sub.name">
+              <t-menu-item v-if="!sub.meta.hidden" :key="sub.name">
                 <router-link class="menu-item-link" :to="{ name: sub.name }">
                   <!--                  <icon :type="sub.meta.icon" class="menu-item-icon"></icon>-->
                   <span class="menu-item-title">{{ sub.meta.title }}</span>
                 </router-link>
-              </a-menu-item>
+              </t-menu-item>
             </template>
-          </a-sub-menu>
+          </t-sub-menu>
         </template>
-      </a-menu>
+      </t-menu>
     </div>
-  </a-layout-sider>
+  </t-layout-sider>
 </template>
 
 <script setup lang="ts">
-import { computed, reactive, watch } from 'vue'
-import { useRoute } from 'vue-router/composables'
 import type { Route } from 'vue-router'
-import { useTheme } from '@packages/hooks'
-import type { LeftMenu } from '@/store/menu'
-import { useMenuStore } from '@/store/menu'
-import _routes from '@/router/routes'
-import Logo from './Logo.vue'
 // @ts-ignore
 import { MenuUnfoldOutlined, MenuFoldOutlined } from '@ant-design/icons-vue'
+import { computed, reactive, watch } from 'vue'
+import { useRoute } from 'vue-router/composables'
+import { useTheme } from '@packages/hooks'
+import type { LeftMenu } from '@/store/menu'
+import _routes from '@/router/routes'
+import { useMenuStore } from '@/store/menu'
+import Logo from './Logo.vue'
 
 // ====================== Hooks ======================
 const route = useRoute()

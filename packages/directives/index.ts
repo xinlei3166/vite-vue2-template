@@ -1,8 +1,7 @@
-import type { App } from 'vue'
 import title from './title'
 
 export default {
-  install: (app: App) => {
+  install: (app: any) => {
     app.directive('title', title)
   }
 }

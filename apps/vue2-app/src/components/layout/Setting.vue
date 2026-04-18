@@ -3,7 +3,7 @@
     <div v-show="!visible" class="setting-drawer-btn-wrap" @click="visible = true">
       <SettingOutlined class="setting-drawer-btn" />
     </div>
-    <a-drawer
+    <t-drawer
       :visible="visible"
       class="setting-drawer"
       placement="right"
@@ -24,58 +24,58 @@
         <h3 class="drawer-title">系统布局配置</h3>
         <div class="drawer-item">
           <span>布局方式</span>
-          <a-select v-model="theme.layout" class="select">
-            <a-select-option value="side">侧边</a-select-option>
-            <a-select-option value="mix">混合</a-select-option>
-          </a-select>
+          <t-select v-model="theme.layout" class="select">
+            <t-select-option value="side">侧边</t-select-option>
+            <t-select-option value="mix">混合</t-select-option>
+          </t-select>
         </div>
         <div class="drawer-item">
           <span>主题色</span>
-          <a-select v-model="theme.theme" class="select" @change="onChangeTheme">
-            <a-select-option value="dark">暗黑</a-select-option>
-            <a-select-option value="light">明亮</a-select-option>
-          </a-select>
+          <t-select v-model="theme.theme" class="select" @change="onChangeTheme">
+            <t-select-option value="dark">暗黑</t-select-option>
+            <t-select-option value="light">明亮</t-select-option>
+          </t-select>
         </div>
         <div class="drawer-item">
           <span>菜单类型</span>
-          <a-select v-model="theme.mode" class="select">
-            <a-select-option value="vertical">垂直</a-select-option>
-            <a-select-option value="inline">内嵌</a-select-option>
-          </a-select>
+          <t-select v-model="theme.mode" class="select">
+            <t-select-option value="vertical">垂直</t-select-option>
+            <t-select-option value="inline">内嵌</t-select-option>
+          </t-select>
         </div>
         <div class="drawer-item">
           <span>顶部高度</span>
-          <a-select v-model="theme.height" class="select">
-            <a-select-option value="48px">48px</a-select-option>
-            <a-select-option value="64px">64px</a-select-option>
-          </a-select>
+          <t-select v-model="theme.height" class="select">
+            <t-select-option value="48px">48px</t-select-option>
+            <t-select-option value="64px">64px</t-select-option>
+          </t-select>
         </div>
         <div class="drawer-item">
           <span>侧边栏宽度</span>
-          <a-input v-model="theme.width" class="select" />
+          <t-input v-model="theme.width" class="select" />
         </div>
         <div class="drawer-item">
           <span>顶部随主题色(混合布局)</span>
-          <a-switch v-model="theme.headerTheme" />
+          <t-switch v-model="theme.headerTheme" />
         </div>
         <div class="drawer-item">
           <span>侧边栏折叠</span>
-          <a-switch v-model="theme.collapsed" />
+          <t-switch v-model="theme.collapsed" />
         </div>
         <div class="drawer-item">
           <span>显示面包屑</span>
-          <a-switch v-model="theme.showBreadcrumb" />
+          <t-switch v-model="theme.showBreadcrumb" />
         </div>
       </div>
-    </a-drawer>
+    </t-drawer>
   </div>
 </template>
 
 <script lang="ts">
-import { defineComponent, ref, onMounted } from 'vue'
-import { useTheme } from '@packages/hooks'
 // @ts-ignore
 import { SettingOutlined, CloseOutlined } from '@ant-design/icons-vue'
+import { defineComponent, ref, onMounted } from 'vue'
+import { useTheme } from '@packages/hooks'
 
 export default defineComponent({
   components: { SettingOutlined, CloseOutlined },

@@ -1,14 +1,14 @@
 <template>
-  <a-card class="card">
+  <t-card class="card">
     <div class="title">Store</div>
-    <a-input
+    <t-input
       v-model="name"
       style="margin-left: 64px; margin-right: 16px; width: 240px"
       placeholder="请输入用户名"
     />
-    <a-button type="primary" @click="onSubmit">提交</a-button>
+    <t-button theme="primary" @click="onSubmit">提交</t-button>
     <div class="title">当前用户：{{ userinfo.name }}</div>
-  </a-card>
+  </t-card>
 </template>
 
 <script lang="ts">

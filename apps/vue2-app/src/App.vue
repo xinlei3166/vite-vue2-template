@@ -1,18 +1,18 @@
 <template>
-  <a-config-provider :locale="locale">
+  <t-config-provider :locale="locale">
     <router-view />
-  </a-config-provider>
+  </t-config-provider>
 </template>
 
 <script lang="ts">
+import dayjs from 'dayjs'
+// @ts-ignore
+import zhCN from 'tdesign-vue/es/locale-provider/zh_CN'
 import { computed, defineComponent, onMounted } from 'vue'
 import { useRouter } from 'vue-router/composables'
-// @ts-ignore
-import zhCN from 'ant-design-vue/es/locale-provider/zh_CN'
-import { useUserStore } from '@/store/user'
 import { getToken } from '@packages/utils'
 import { checkExternalWhiteRoute } from '@/router'
-import dayjs from 'dayjs'
+import { useUserStore } from '@/store/user'
 import 'dayjs/locale/zh-cn'
 
 dayjs.locale('zh-cn')

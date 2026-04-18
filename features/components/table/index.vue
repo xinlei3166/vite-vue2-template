@@ -1,7 +1,7 @@
 <template>
   <div>
     <Search
-      :columns="columns"
+      :columns="searchColumns"
       :model="search"
       label-width="42px"
       style="margin-bottom: 20px"
@@ -9,47 +9,42 @@
       @reset="onReset"
     >
       <template #name6>
-        <a-select
-          v-model="search.name6"
-          class="w-full"
-          :allow-clear="true"
-          placeholder="请选择性别"
-        >
-          <a-select-option value="male">男</a-select-option>
-          <a-select-option value="female">女</a-select-option>
-        </a-select>
+        <t-select v-model="search.name6" class="w-full" :clearable="true" placeholder="请选择性别">
+          <t-select-option value="male">男</t-select-option>
+          <t-select-option value="female">女</t-select-option>
+        </t-select>
       </template>
     </Search>
-    <a-card class="card">
-      <a-table
+    <t-card class="card">
+      <t-table
         class="content"
         row-key="id"
         :loading="loading"
-        :data-source="data"
+        :data="data"
         :columns="tableColumns"
         :pagination="pagination"
         @change="onTableChange"
       >
         <template #operation="{ record }">
-          <span class="text-btn" @click="onEdit(record)">编辑</span>
-          <span class="text-btn" @click="onPreview(record)">预览</span>
+          <t-link hover="color" class="t-text-btn" @click="onEdit(record)">编辑</t-link>
+          <t-link hover="color" class="t-text-btn" @click="onPreview(record)">预览</t-link>
         </template>
-      </a-table>
-    </a-card>
+      </t-table>
+    </t-card>
   </div>
 </template>
 
 <script setup lang="ts">
 import { onBeforeMount, computed, reactive } from 'vue'
 import { useData } from '@packages/hooks'
-import type { Pagination } from '@packages/types'
+// @ts-ignore
 import { getList } from '@/api'
-import { columns, tableColumns } from './columns'
+import { searchColumns, tableColumns } from './columns'
 
 const params = computed(() => ({}))
 const { loading, data, pagination, init, onSearch, onTableChange } = useData(getList, {
-  params,
-  pagination: { pageSize: 10 } // 不传，默认为10
+  params
+  // 不传，默认为10
 })
 
 onBeforeMount(async () => {

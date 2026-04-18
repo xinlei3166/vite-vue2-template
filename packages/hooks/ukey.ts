@@ -1,7 +1,7 @@
+import { MessagePlugin } from 'tdesign-vue'
 import { reactive } from 'vue'
-import { message, Modal } from 'ant-design-vue'
-import useSocket from './socket'
 import { httpMsg } from '@packages/types/enums'
+import useSocket from './socket'
 
 export const useUKey = () => {
   const { open, send } = useSocket()
@@ -21,27 +21,27 @@ export const useUKey = () => {
     const [openErr] = await open()
     if (openErr) {
       state.loading = false
-      message.error('WebSocket连接失败')
+      MessagePlugin.error('WebSocket连接失败')
       return
     }
     // 获取设备
     const [devErr, devData] = await send('EnumDev')
     if (devErr) {
       state.loading = false
-      message.error('获取UKey设备信息失败')
+      MessagePlugin.error('获取UKey设备信息失败')
       return
     }
     state.devList = devData.devList || []
     if (state.devList.length <= 0) {
       state.loading = false
-      message.error(
+      MessagePlugin.error(
         '未检查到UKey，可能存在以下情况：1、未插入UKey；2、UKey可能损坏；3、UKey插入的USB口可能损坏；'
       )
       return
     }
     if (state.devList.length > 1) {
       state.loading = false
-      message.error('请插入一个UKey设备')
+      MessagePlugin.error('请插入一个UKey设备')
       return
     }
     state.devID = state.devList[0].devID
@@ -54,7 +54,7 @@ export const useUKey = () => {
     const publicKey = pubKeyData.publicKey
     if (pubKeyErr || pubKeyData.result !== 0 || !publicKey) {
       state.loading = false
-      message.error('获取Ukey公钥失败')
+      MessagePlugin.error('获取Ukey公钥失败')
       return
     }
     state.publicKey = publicKey
@@ -66,7 +66,7 @@ export const useUKey = () => {
     console.log('pinErr', pinErr, pinData)
     if (pinErr) {
       state.loading = false
-      message.error('验证PIN失败')
+      MessagePlugin.error('验证PIN失败')
       return
     }
     return true
@@ -77,7 +77,7 @@ export const useUKey = () => {
     console.log('certErr', certErr, certData)
     if (certErr) {
       state.loading = false
-      message.error('导出证书失败')
+      MessagePlugin.error('导出证书失败')
       return
     }
     state[key] = certData.cert
@@ -88,7 +88,7 @@ export const useUKey = () => {
     const [reckonECCSignErr, reckonECCSignData] = await send('ECCSign', state.devID, initData)
     if (reckonECCSignErr) {
       state.loading = false
-      message.error('计算签名失败')
+      MessagePlugin.error('计算签名失败')
       return
     }
     state.signedData = reckonECCSignData.signedData
@@ -100,7 +100,7 @@ export const useUKey = () => {
     console.log('gekpErr', gekpErr, gekpData)
     if (gekpErr) {
       state.loading = false
-      message.error('生成签名密钥对失败')
+      MessagePlugin.error('生成签名密钥对失败')
       return
     }
     return true
@@ -111,7 +111,7 @@ export const useUKey = () => {
     const [err] = await send('ImportECCKeyPair', state.devID, state.envelopedEncKeyPair)
     if (err) {
       state.loading = false
-      message.error('导入用户加密密钥对失败')
+      MessagePlugin.error('导入用户加密密钥对失败')
       return
     }
     return true
@@ -123,7 +123,7 @@ export const useUKey = () => {
     const [err2] = await send('ImportECCCert', state.devID, 0, state.encCert)
     if (err1 || err2) {
       state.loading = false
-      message.error('导入数字证书失败')
+      MessagePlugin.error('导入数字证书失败')
       return
     }
     return true
@@ -138,7 +138,7 @@ export const useUKey = () => {
     const [err, res] = await send('ECCDecrypt', state.devID, 1, encryptedData, isEncode)
     if (err) {
       state.loading = false
-      message.error(msg)
+      MessagePlugin.error(msg)
       return
     }
     state[key] = res.plainData
@@ -149,7 +149,7 @@ export const useUKey = () => {
     const [err, res] = await send('GenRandom', state.devID, randLen)
     if (err) {
       state.loading = false
-      message.error(msg)
+      MessagePlugin.error(msg)
       return
     }
     state[key] = res.randData
@@ -160,7 +160,7 @@ export const useUKey = () => {
     const [err, res] = await send('SM3Digest', value)
     if (err) {
       state.loading = false
-      message.error(msg)
+      MessagePlugin.error(msg)
       return
     }
     state[key] = res.digestedData
@@ -172,7 +172,7 @@ export const useUKey = () => {
     console.log('WriteFile', err, res)
     if (err) {
       state.loading = false
-      message.error(msg)
+      MessagePlugin.error(msg)
       return
     }
     return true
@@ -183,7 +183,7 @@ export const useUKey = () => {
     console.log('ReadFile', err, res)
     if (err) {
       state.loading = false
-      message.error(msg)
+      MessagePlugin.error(msg)
       return
     }
     state[key] = res.fileData

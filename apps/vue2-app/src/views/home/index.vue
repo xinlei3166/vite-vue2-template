@@ -1,7 +1,7 @@
 <template>
-  <a-card class="card">
+  <t-card class="card">
     <div class="title">{{ title }}</div>
-  </a-card>
+  </t-card>
 </template>
 
 <script setup lang="ts">

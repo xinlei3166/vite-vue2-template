@@ -1,7 +1,6 @@
 import Mock from 'mockjs'
-import qs from 'qs'
-import { getUserMenu, getPermissions, getUserinfo, login, logout } from './user'
 import { getList } from './data'
+import { getUserMenu, getPermissions, getUserinfo, login, logout } from './user'
 
 Mock.setup({
   timeout: 300

@@ -1,4 +1,4 @@
-import type { UploadFile } from 'ant-design-vue'
+import type { UploadFile } from 'tdesign-vue'
 import { is } from './is'
 
 export function base64ToURL(base64String: string, type = 'application/pdf;chartset=UTF-8') {

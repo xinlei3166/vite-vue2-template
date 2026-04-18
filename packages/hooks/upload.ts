@@ -1,25 +1,26 @@
+import type { UploadProps, UploadFile } from 'tdesign-vue'
+import { MessagePlugin } from 'tdesign-vue'
 import { ref } from 'vue'
-import { message } from 'ant-design-vue'
-import type { Upload, UploadFile } from 'ant-design-vue/types/upload'
 
 export interface UploadConfig {
   upload?: boolean
   maxCount?: number
   maxSize?: number // MB
   accept?: string // .zip,.jpg
+  [key: string]: any
 }
 
 export function useUpload({ maxCount, maxSize, accept, upload = true }: UploadConfig) {
   const fileList = ref<UploadFile[]>([])
   const uploading = ref<boolean>(false)
 
-  const beforeUpload: Upload['beforeUpload'] = file => {
+  const beforeUpload: UploadProps['beforeUpload'] = (file: any) => {
     if (maxCount && fileList.value.length === maxCount) {
-      message.error(`最多只能上传${maxCount}个文件`)
+      MessagePlugin.error(`最多只能上传${maxCount}个文件`)
       return false
     }
     if (maxSize && file.size > maxSize * 1024 * 1024) {
-      message.error(`上传文件大小不能超过${maxSize}MB`)
+      MessagePlugin.error(`上传文件大小不能超过${maxSize}MB`)
       fileList.value.pop()
       return false
     }
@@ -27,18 +28,20 @@ export function useUpload({ maxCount, maxSize, accept, upload = true }: UploadCo
     const sIndex = file.name.lastIndexOf('.')
     const suffix = file.name.slice(sIndex).toLowerCase()
     if (suffixes?.length && !suffixes.includes(suffix)) {
-      message.error(`文件格式错误，请上传${accept}格式的文件`)
+      MessagePlugin.error(`文件格式错误，请上传${accept}格式的文件`)
       return false
     }
     if (upload) return true
-    fileList.value = [...fileList.value, file]
+    const newFileList = [...fileList.value, file]
+    fileList.value = newFileList
+    console.log('fileList', newFileList)
     return false
   }
 
-  const onRemove = (file: any) => {
-    const index = fileList.value?.indexOf(file)
+  const onRemove: UploadProps['onRemove'] = (context: any) => {
+    const { index } = context
     const newFileList = fileList.value?.slice()
-    newFileList?.splice(index!, 1)
+    newFileList?.splice(index, 1)
     fileList.value = newFileList
   }
 
@@ -56,13 +59,81 @@ export function useUpload({ maxCount, maxSize, accept, upload = true }: UploadCo
     //   .then(() => {
     //     fileList.value = []
     //     uploading.value = false
-    //     message.success('upload successfully.')
+    //     MessagePlugin.success('upload successfully.')
     //   })
     //   .catch(() => {
     //     uploading.value = false
-    //     message.error('upload failed.')
+    //     MessagePlugin.error('upload failed.')
     //   })
   }
 
-  return { fileList, uploading, onRemove, beforeUpload, onUpload }
+  const createRequestMethod = (
+    getParams: () => Record<string, any> = () => ({})
+  ): UploadProps['requestMethod'] => {
+    return async fileOrFiles => {
+      const file = Array.isArray(fileOrFiles) ? fileOrFiles[0] : fileOrFiles
+
+      // 1. 构造上传参数
+      const formData = new FormData()
+      formData.append('file', (file.raw ?? file) as any)
+      const params = getParams()
+      const paramKeys = Object.keys(params)
+      if (paramKeys.length) {
+        paramKeys.forEach(key => {
+          formData.append(key, params[key])
+        })
+      }
+
+      // 2. 传入定义的缩略图配置
+      const thumbImageConfigs = [{ width: 600, quality: 85 }]
+      if (!paramKeys.includes('thumb_image_configs')) {
+        formData.append('thumb_image_configs', JSON.stringify(thumbImageConfigs))
+      }
+
+      // 3. 执行请求
+      try {
+        const res = await uploadFile(formData, {
+          headers: { 'Content-Type': ContentTypeEnum.FormData }
+          // onUploadProgress: (event: any) => {
+          //   const percent = event.total ? Math.floor((event.loaded / event.total) * 100) : 0
+          //   console.log('upload progress:', percent)
+          // }
+        })
+
+        if (!res || res.code !== 0) {
+          throw new Error(res.msg || '上传失败')
+        }
+
+        // MessagePlugin.success('上传成功')
+        // 关键：返回给 TDesign 的结果
+        return { status: 'success', response: { ...res.data, url: res.data?.url } }
+      } catch (err: any) {
+        MessagePlugin.error(`上传失败: ${err.message}`)
+        return { status: 'fail', error: err, response: err }
+      }
+    }
+  }
+  const requestMethod = createRequestMethod()
+
+  const onChange = ({ fileList: newFileList }: any) => {
+    const list = newFileList.map((f: any) => {
+      if (f.response) {
+        f.url = f.response.url
+      }
+      return f
+    })
+    fileList.value = list
+    console.log('fileList', list)
+  }
+
+  return {
+    fileList,
+    uploading,
+    onRemove,
+    beforeUpload,
+    onUpload,
+    requestMethod,
+    createRequestMethod,
+    onChange
+  }
 }

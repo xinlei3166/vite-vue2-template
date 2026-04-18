@@ -1,5 +1,5 @@
 <template>
-  <a-card class="card">
+  <t-card class="card">
     <div class="title">Draggable</div>
     <div class="draggable-wrap">
       <draggable v-model="arr" v-bind="dragOptions" @start="onDragStart" @end="onDragEnd">
@@ -10,7 +10,7 @@
         </transition-group>
       </draggable>
     </div>
-  </a-card>
+  </t-card>
 </template>
 
 <script lang="ts">

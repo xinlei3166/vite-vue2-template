@@ -1,8 +1,8 @@
+import { customAlphabet } from 'nanoid'
 import qs from 'qs'
 import { isObject, isArray } from './is'
-import sm3 from './sm3'
-import { customAlphabet } from 'nanoid'
 import { foreignPhonePattern, phonePattern } from './patterns'
+import sm3 from './sm3'
 
 /**
  * 获取url 参数的方法
@@ -116,11 +116,11 @@ export const flattenDeepObjArr = (arr: any[], deepKey = 'children') => {
 // 名称拼接 a/b/c
 export const joinStr = (arr: string[], separator = '/') => arr.join(separator)
 
-export function doSM3(text: String): String {
+export function doSM3(text: string): string {
   return sm3(text)
 }
 
-export const randomString = (len: Number): String => {
+export const randomstring = (len: number): string => {
   len = len || 32
   const $chars = 'ABCDEFGHJKMNPQRSTWXYZabcdefhijkmnprstwxyz2345678'
   /** **默认去掉了容易混淆的字符oOLl,9gq,Vv,Uu,I1****/
@@ -214,6 +214,6 @@ export function isJSON(str: any) {
   }
 }
 
-export const convertStringToBoolean = (value: string) => {
+export const convertstringToBoolean = (value: string) => {
   return value === 'true' ? true : value === 'false' ? false : value
 }

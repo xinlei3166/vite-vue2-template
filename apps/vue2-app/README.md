@@ -4,7 +4,7 @@ Develop vue2 projects using the vue3 syntax
 
 ## Framework packages
 
-Vite4 + Vue2 + Pinia + Vue Router + TypeScript + Ant Design Vue
+Vite + Vue2 + Pinia2 + Vue Router + TypeScript + TDesign Vue
 
 ## Package Manager
 

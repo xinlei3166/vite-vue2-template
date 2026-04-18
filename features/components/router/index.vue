@@ -1,8 +1,8 @@
 <template>
-  <a-card class="card">
+  <t-card class="card">
     <div class="title">Router</div>
     <div class="title" style="cursor: pointer" @click="onRedirect">点击跳转到首页</div>
-  </a-card>
+  </t-card>
 </template>
 
 <script lang="ts">

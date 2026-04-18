@@ -1,5 +1,5 @@
 <template>
-  <a-breadcrumb :routes="routes">
+  <t-breadcrumb :routes="routes">
     <template #itemRender="{ route, routes }">
       <span v-if="routes.indexOf(route) === lastIndex">
         {{ route.meta.title }}
@@ -8,7 +8,7 @@
         {{ route.meta.title }}
       </router-link>
     </template>
-  </a-breadcrumb>
+  </t-breadcrumb>
 </template>
 
 <script lang="ts">

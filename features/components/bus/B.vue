@@ -6,25 +6,24 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, ref, onMounted, onBeforeUnmount, getCurrentInstance } from 'vue'
-import type { Emitter } from 'mitt'
+import { defineComponent, ref, onMounted, onBeforeUnmount } from 'vue'
+import { useEvent } from '@packages/hooks'
 
 export default defineComponent({
   setup() {
-    const instance = getCurrentInstance().proxy as any
-    const bus = instance.$bus as Emitter<any>
+    const event = useEvent()
     const number = ref(0)
 
-    const changeNumber = value => {
+    const changeNumber = (value: any) => {
       number.value = value
     }
 
     onMounted(() => {
-      bus.on('change-number', changeNumber)
+      event.on('change-number', changeNumber)
     })
 
     onBeforeUnmount(() => {
-      bus.off('change-number', changeNumber)
+      event.off('change-number', changeNumber)
     })
 
     return { number }

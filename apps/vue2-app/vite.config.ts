@@ -1,15 +1,16 @@
-import { loadEnv, defineConfig } from 'vite'
+import { TDesignResolver } from '@tdesign-vue-next/auto-import-resolver'
 import vue from '@vitejs/plugin-vue2'
 import jsx from '@vitejs/plugin-vue2-jsx'
-import UnoCSS from 'unocss/vite'
-import { createStyleImportPlugin, AndDesignVueResolve } from 'vite-plugin-style-import'
-import { createHtmlPlugin } from 'vite-plugin-html'
-import { vitePluginAntdUseDayjs } from '@wry-smile/vite-plugin-antd-use-dayjs'
-import AutoImport from 'unplugin-auto-import/vite'
+// @ts-ignore
 import path from 'path'
+import UnoCSS from 'unocss/vite'
+import AutoImport from 'unplugin-auto-import/vite'
+import Components from 'unplugin-vue-components/vite'
+import { loadEnv, defineConfig } from 'vite'
 
 // @ts-ignore
 export default ({ mode, command }) => {
+  const isBuild = command === 'build'
   console.log('mode', mode)
   // const env = loadEnv(mode, process.cwd())
   const envDir = path.resolve(process.cwd(), 'env')
@@ -26,17 +27,27 @@ export default ({ mode, command }) => {
       outDir: env.VITE_OUTDIR || 'dist',
       commonjsOptions: {
         transformMixedEsModules: true
+      },
+      rolldownOptions: {
+        output: {
+          minify: {
+            compress: {
+              dropConsole: isBuild,
+              dropDebugger: isBuild
+            }
+          }
+        }
       }
     },
     css: {
       preprocessorOptions: {
-        less: {
-          javascriptEnabled: true,
-          modifyVars: {
-            'primary-color': '#0077FA'
-          },
-          additionalData: `@import "@packages/styles/theme.less";`
-        }
+        // less: {
+        //   javascriptEnabled: true,
+        //   modifyVars: {
+        //     '@brand-color': '#0077FA'
+        //   },
+        //   additionalData: `@import "@packages/styles/theme.less";`
+        // }
       }
     },
     plugins: [
@@ -45,22 +56,27 @@ export default ({ mode, command }) => {
       UnoCSS(),
       AutoImport({
         imports: ['vue', 'vue-router'],
+        resolvers: [TDesignResolver()],
         dts: false
       }),
-      createHtmlPlugin({
-        // inject: {
-        //   data: {
-        //     title: 'title',
-        //     injectScript: `<script src="./inject.js"></script>`
-        //   }
-        // }
-      }),
-      createStyleImportPlugin({
-        resolves: [AndDesignVueResolve()]
-      }),
-      vitePluginAntdUseDayjs.vite({
-        defaultLocale: false
+      Components({
+        resolvers: [TDesignResolver()]
       })
+      // {
+      //   name: 'html-transform',
+      //   transformIndexHtml(html) {
+      //     return {
+      //       html: html.replace('%title%', env.VITE_APP_TITLE),
+      //       tags: [
+      //         {
+      //           tag: 'script',
+      //           attrs: { src: './inject.js' },
+      //           injectTo: 'head'
+      //         }
+      //       ]
+      //     }
+      //   }
+      // }
     ],
     base: env.VITE_APP_BASE || '/',
     resolve: {
@@ -70,9 +86,6 @@ export default ({ mode, command }) => {
         features: path.resolve(__dirname, '../../features')
       },
       extensions: ['.js', '.jsx', '.ts', '.tsx', '.mjs', '.vue', '.json', '.less', '.scss', '.css']
-    },
-    esbuild: {
-      drop: command === 'build' ? ['console', 'debugger'] : []
     },
     server: {
       proxy: {

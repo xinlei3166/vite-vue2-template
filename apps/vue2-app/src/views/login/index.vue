@@ -9,7 +9,7 @@
         <div class="text-text2 text-center mt-4 mb-12">
           Vue 是一款非常流行的 JavaScript 前端框架
         </div>
-        <a-form
+        <t-form
           ref="formRef"
           class="login-form"
           :model="form"
@@ -18,47 +18,47 @@
           :label-col="{ flex: '50px' }"
           label-align="right"
         >
-          <a-form-item class="login-form-item" label="" name="account">
-            <a-input
+          <t-form-item class="login-form-item" label="" name="account">
+            <t-input
               v-model:value.trim="form.account"
               size="large"
-              :allow-clear="false"
+              :clearable="false"
               placeholder="账号：admin"
             >
               <template #prefix>
                 <UserOutlined class="text-primary text-3.5" type="user" />
               </template>
-            </a-input>
-          </a-form-item>
-          <a-form-item class="login-form-item" label="" name="password">
-            <a-input-password
+            </t-input>
+          </t-form-item>
+          <t-form-item class="login-form-item" label="" name="password">
+            <t-input-password
               v-model:value.trim="form.password"
               size="large"
               type="password"
-              :allow-clear="false"
+              :clearable="false"
               placeholder="密码：123456"
             >
               <template #prefix>
                 <LockOutlined class="text-primary text-3.5" type="user" />
               </template>
-            </a-input-password>
-          </a-form-item>
-          <a-form-item label="">
-            <a-checkbox v-model:checked="checked">自动登录</a-checkbox>
+            </t-input-password>
+          </t-form-item>
+          <t-form-item label="">
+            <t-checkbox v-model:checked="checked">自动登录</t-checkbox>
             <a class="float-right text-btn" href="#">忘记密码</a>
-          </a-form-item>
-          <a-form-item class="login-form-btn-wrap" label="">
-            <a-button
+          </t-form-item>
+          <t-form-item class="login-form-btn-wrap" label="">
+            <t-button
               class="login-btn"
               size="large"
-              type="primary"
+              theme="primary"
               :loading="loading"
               @click="onSubmit"
             >
               登 录
-            </a-button>
-          </a-form-item>
-        </a-form>
+            </t-button>
+          </t-form-item>
+        </t-form>
       </div>
       <div class="footer">
         <div class="links">
@@ -73,14 +73,14 @@
 </template>
 
 <script setup lang="ts">
-import { ref, reactive } from 'vue'
-import { useRouter, useRoute } from 'vue-router/composables'
-import { message } from 'ant-design-vue'
 // @ts-ignore
 import { UserOutlined, LockOutlined } from '@ant-design/icons-vue'
-import { login } from '@/api'
-import { setToken } from '@packages/utils'
+import { MessagePlugin } from 'tdesign-vue'
+import { ref, reactive } from 'vue'
+import { useRouter, useRoute } from 'vue-router/composables'
 import { useTheme } from '@packages/hooks/theme'
+import { setToken } from '@packages/utils'
+import { login } from '@/api'
 import { useMenuStore } from '@/store/menu'
 import { useUserStore } from '@/store/user'
 
@@ -124,7 +124,7 @@ const doLogin = async () => {
   }
   await userStore.setUserinfo()
   await userStore.setPermissions()
-  message.success({
+  MessagePlugin.success({
     content: '登录成功',
     duration: 1,
     onClose: () => {

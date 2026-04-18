@@ -1,7 +1,7 @@
 <template>
   <div class="layout-nav">
     <BellOutlined class="layout-header-icon" />
-    <a-dropdown>
+    <t-dropdown>
       <span class="dropdown-link">
         <span class="dropdown-img-wrap">
           <img class="dropdown-img" src="@/assets/avatar.png" />
@@ -9,28 +9,28 @@
         <span class="dropdown-text">{{ userinfo.name }}</span>
       </span>
       <template #overlay>
-        <a-menu>
-          <a-menu-item @click="onLogout">
+        <t-menu>
+          <t-menu-item @click="onLogout">
             <LoginOutlined class="menu-item-icon" />
             退出登录
-          </a-menu-item>
-        </a-menu>
+          </t-menu-item>
+        </t-menu>
       </template>
-    </a-dropdown>
+    </t-dropdown>
   </div>
 </template>
 
 <script setup lang="ts">
-import { computed } from 'vue'
-import { message } from 'ant-design-vue'
-import { useRouter } from 'vue-router/composables'
 // @ts-ignore
 import { BellOutlined, UserOutlined, LoginOutlined, SettingOutlined } from '@ant-design/icons-vue'
+import { MessagePlugin } from 'tdesign-vue'
+import { computed } from 'vue'
+import { useRouter } from 'vue-router/composables'
 import { useTheme } from '@packages/hooks'
 import { removeToken } from '@packages/utils'
 import { logout } from '@/api'
-import { useUserStore } from '@/store/user'
 import { useMenuStore } from '@/store/menu'
+import { useUserStore } from '@/store/user'
 
 // ====================== Hooks ======================
 const theme = useTheme()
@@ -44,7 +44,7 @@ const userinfo = computed(() => userStore.Userinfo)
 const onLogout = async () => {
   const res = await logout()
   if (!res || res.code !== 0) return
-  message.success({
+  MessagePlugin.success({
     content: '退出登录成功',
     duration: 1,
     onClose: () => {

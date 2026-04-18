@@ -1,10 +1,10 @@
 <template>
   <div class="exception-wrap">
-    <a-result status="500" title="500" sub-title="抱歉，服务器出错了">
+    <t-result status="500" title="500" sub-title="抱歉，服务器出错了">
       <template #extra>
         <Buttons />
       </template>
-    </a-result>
+    </t-result>
   </div>
 </template>
 

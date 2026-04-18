@@ -1,24 +1,24 @@
 <template>
-  <a-layout v-if="layout" id="layout" :style="{ overflow: 'auto', height: '100vh' }">
+  <t-layout v-if="layout" id="layout" :style="{ overflow: 'auto', height: '100vh' }">
     <div
       class="layout-fixed-stuff"
       :style="{ width: theme.collapsed ? theme.collapsedWidth : theme.width }"
     ></div>
     <Siderbar />
-    <a-layout>
+    <t-layout>
       <header
         v-if="theme.layout === 'mix'"
         :class="['layout-header-mix', { dark: !theme.headerTheme }]"
       >
         <Logo />
-        <a-layout-header class="layout-header">
+        <t-layout-header class="layout-header">
           <Nav />
-        </a-layout-header>
+        </t-layout-header>
       </header>
-      <a-layout-header v-else :class="['layout-header']">
+      <t-layout-header v-else :class="['layout-header']">
         <Nav />
-      </a-layout-header>
-      <a-layout-content
+      </t-layout-header>
+      <t-layout-content
         :class="['layout-content-wrap', { 'layout-content-wrap-mix': theme.layout === 'mix' }]"
       >
         <div v-show="theme.showBreadcrumb" class="layout-breadcrumb">
@@ -27,22 +27,22 @@
         <div class="layout-content">
           <router-view />
         </div>
-      </a-layout-content>
-    </a-layout>
+      </t-layout-content>
+    </t-layout>
     <Setting v-if="isDev" />
-  </a-layout>
+  </t-layout>
   <router-view v-else />
 </template>
 
 <script setup lang="ts">
 import { ref, computed } from 'vue'
 import { useRouter } from 'vue-router/composables'
-import Nav from './Nav.vue'
-import Siderbar from './Siderbar.vue'
-import Breadcrumb from './Breadcrumb.vue'
-import Setting from './Setting.vue'
-import Logo from './Logo.vue'
 import { useTheme } from '@packages/hooks'
+import Breadcrumb from './Breadcrumb.vue'
+import Logo from './Logo.vue'
+import Nav from './Nav.vue'
+import Setting from './Setting.vue'
+import Siderbar from './Siderbar.vue'
 
 const isDev = ['development', 'github'].includes(import.meta.env.MODE)
 const router = useRouter()

@@ -1,6 +1,6 @@
 import axios from 'axios'
-import { message } from 'ant-design-vue'
 import dayjs from 'dayjs'
+import { MessagePlugin } from 'tdesign-vue'
 import { deepClone } from '@packages/utils'
 
 const config = {
@@ -147,7 +147,7 @@ export const usePrometheus = (options?: PrometheusOptions) => {
 
       return data
     } catch (e) {
-      message.error('请求失败')
+      MessagePlugin.error('请求失败')
       return
     }
   }
@@ -173,7 +173,7 @@ export const usePrometheus = (options?: PrometheusOptions) => {
         legendData: result.map((r: Record<string, any>) => r.metric.name)
       }
     } catch (e) {
-      message.error('请求失败')
+      MessagePlugin.error('请求失败')
       return
     }
   }

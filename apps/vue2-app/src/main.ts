@@ -1,10 +1,11 @@
+import { createPinia, PiniaVuePlugin } from 'pinia'
+import persistedState from 'pinia-plugin-persistedstate'
 import Vue from 'vue'
 import VueRouter from 'vue-router'
-import { createPinia, PiniaVuePlugin } from 'pinia'
-import piniaPersist from 'pinia-plugin-persist'
+import plugins from '@packages/plugins'
 import App from './App.vue'
 import router from './router'
-import plugins from '@packages/plugins'
+import 'tdesign-vue/es/style/index.css'
 import '@packages/styles/index.less'
 import '@packages/styles/reset.less'
 import '@/styles/index.less'
@@ -17,7 +18,7 @@ function createApp() {
 
   app.use(PiniaVuePlugin)
   const pinia = createPinia()
-  pinia.use(piniaPersist)
+  pinia.use(persistedState)
 
   app.use(VueRouter)
   app.use(plugins)

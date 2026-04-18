@@ -1,5 +1,5 @@
 <template>
-  <a-button type="primary" @click="onGoHome">返回首页</a-button>
+  <t-button theme="primary" @click="onGoHome">返回首页</t-button>
 </template>
 
 <script setup lang="ts">

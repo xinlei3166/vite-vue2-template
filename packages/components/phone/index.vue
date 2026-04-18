@@ -1,7 +1,7 @@
 <template>
   <div class="column-wrap-phone flex items-center">
     <div :class="['phone-wrap', { loading }]" :style="{ minWidth: minWidth }">
-      <a-spin v-if="loading" />
+      <t-spin v-if="loading" />
       <span v-else>{{ computedPhone }}</span>
     </div>
     <slot v-if="phone" name="extra"></slot>
@@ -13,9 +13,9 @@
 </template>
 
 <script setup lang="ts">
-import { ref, computed } from 'vue'
 // @ts-ignore
 import { EyeOutlined } from '@ant-design/icons-vue'
+import { ref, computed } from 'vue'
 import { getPhone } from './api'
 
 const props = defineProps({

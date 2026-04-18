@@ -59,22 +59,13 @@ const routes: RouteConfig[] = [
         component: () => import('features/components/table/index.vue')
       },
       {
-        path: 'fixed-table',
-        name: 'fixed-table',
+        path: 'sortable',
+        name: 'sortable',
         meta: {
-          title: 'fixed-table',
-          icon: 'icon-appstore'
-        },
-        component: () => import('features/components/table/fixed.vue')
-      },
-      {
-        path: 'draggable',
-        name: 'draggable',
-        meta: {
-          title: 'draggable',
+          title: 'sortable',
           icon: 'icon-setting'
         },
-        component: () => import('features/components/draggable/index.vue')
+        component: () => import('features/components/sortable/index.vue')
       }
     ]
   }
