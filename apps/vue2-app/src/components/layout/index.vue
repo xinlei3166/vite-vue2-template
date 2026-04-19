@@ -1,5 +1,13 @@
 <template>
-  <t-layout v-if="layout" id="layout" :style="{ overflow: 'auto', height: '100vh' }">
+  <t-layout
+    v-if="layout"
+    id="layout"
+    :style="{
+      flexDirection: 'row',
+      overflow: 'auto',
+      height: '100vh'
+    }"
+  >
     <div
       class="layout-fixed-stuff"
       :style="{ width: theme.collapsed ? theme.collapsedWidth : theme.width }"
@@ -11,15 +19,21 @@
         :class="['layout-header-mix', { dark: !theme.headerTheme }]"
       >
         <Logo />
-        <t-layout-header class="layout-header">
+        <t-header class="layout-header">
           <Nav />
-        </t-layout-header>
+        </t-header>
       </header>
-      <t-layout-header v-else :class="['layout-header']">
+      <t-header
+        v-else
+        :class="['layout-header', { light: theme.theme === 'light', dark: theme.theme === 'dark' }]"
+      >
         <Nav />
-      </t-layout-header>
-      <t-layout-content
+      </t-header>
+      <t-content
         :class="['layout-content-wrap', { 'layout-content-wrap-mix': theme.layout === 'mix' }]"
+        :style="{
+          marginTop: theme.layout === 'mix' ? theme.height : ''
+        }"
       >
         <div v-show="theme.showBreadcrumb" class="layout-breadcrumb">
           <Breadcrumb />
@@ -27,7 +41,7 @@
         <div class="layout-content">
           <router-view />
         </div>
-      </t-layout-content>
+      </t-content>
     </t-layout>
     <Setting v-if="isDev" />
   </t-layout>
@@ -68,18 +82,19 @@ const layout = computed(() => window.self === window.top && !window.__POWERED_BY
   display: flex;
   align-items: center;
   justify-content: space-between;
-  box-shadow: 0 1px 4px #00152914;
+  // box-shadow: 0 1px 4px #00152914;
+  border-bottom: 1px solid var(--td-component-stroke);
   &.dark {
-    background: @layout-header-background !important;
+    background: var(--dark-layout-header-background) !important;
   }
   &.light {
-    background: #fff !important;
+    background: var(--td-bg-color-container) !important;
   }
 }
 
 .layout-breadcrumb {
-  background: #fff;
-  padding: 12px 24px;
+  background: var(--td-bg-color-page);
+  padding: 16px 16px 0;
   flex-shrink: 0;
 }
 
@@ -92,6 +107,7 @@ const layout = computed(() => window.self === window.top && !window.__POWERED_BY
 .layout-content {
   flex: auto;
   padding: 16px;
+  min-height: 0;
 }
 
 .layout-header-mix {
@@ -104,12 +120,14 @@ const layout = computed(() => window.self === window.top && !window.__POWERED_BY
   z-index: 200;
   display: flex;
   background: #fff;
-  box-shadow: 0 1px 4px #00152914;
+  // box-shadow: 0 1px 4px #00152914;
+  border-bottom: 1px solid var(--td-component-stroke);
   &.dark {
-    background: @layout-header-background !important;
+    background: var(--dark-layout-header-background) !important;
   }
   .layout-header {
     box-shadow: none;
+    border-bottom: none;
     background: transparent !important;
     flex: 1;
   }
@@ -118,11 +136,7 @@ const layout = computed(() => window.self === window.top && !window.__POWERED_BY
 // theme
 html.dark {
   .layout-header-mix {
-    background: @layout-header-background;
+    background: var(--dark-layout-header-background);
   }
-}
-
-.layout-content-wrap-mix {
-  margin-top: v-bind('theme.height');
 }
 </style>

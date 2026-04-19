@@ -1,4 +1,4 @@
-import { TDesignResolver } from '@tdesign-vue-next/auto-import-resolver'
+// import { TDesignResolver } from '@tdesign-vue-next/auto-import-resolver'
 import vue from '@vitejs/plugin-vue2'
 import jsx from '@vitejs/plugin-vue2-jsx'
 // @ts-ignore
@@ -56,11 +56,11 @@ export default ({ mode, command }) => {
       UnoCSS(),
       AutoImport({
         imports: ['vue', 'vue-router'],
-        resolvers: [TDesignResolver()],
+        // resolvers: [TDesignResolver()],
         dts: false
       }),
       Components({
-        resolvers: [TDesignResolver()]
+        // resolvers: [TDesignResolver()]
       })
       // {
       //   name: 'html-transform',

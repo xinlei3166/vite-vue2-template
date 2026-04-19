@@ -7,7 +7,7 @@
 <script lang="ts">
 import dayjs from 'dayjs'
 // @ts-ignore
-import zhCN from 'tdesign-vue/es/locale-provider/zh_CN'
+import zhCN from 'tdesign-vue/es/locale/zh_CN'
 import { computed, defineComponent, onMounted } from 'vue'
 import { useRouter } from 'vue-router/composables'
 import { getToken } from '@packages/utils'

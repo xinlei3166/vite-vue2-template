@@ -21,12 +21,13 @@ const mix = computed(() => theme.value.layout === 'mix')
 
 <style lang="less" scoped>
 .layout-logo {
-  min-width: v-bind('width');
+  // min-width: v-bind('width');
   position: relative;
   display: flex;
   align-items: center;
-  padding: 0 16px;
-  height: v-bind('theme.height');
+  margin-left: var(--td-comp-margin-l) !important;
+  margin-right: var(--td-comp-margin-l);
+  // height: v-bind('theme.height');
 
   .logo-link {
     cursor: pointer;
@@ -48,9 +49,9 @@ const mix = computed(() => theme.value.layout === 'mix')
   }
 
   .logo-text {
-    margin: 0 0 0 12px;
+    margin: 0 0 0 8px;
     overflow: hidden;
-    color: #fff;
+    color: theme('colors.textPrimary');
     font-weight: 600;
     font-size: 18px;
     line-height: 32px;
@@ -59,10 +60,12 @@ const mix = computed(() => theme.value.layout === 'mix')
   }
 }
 
-.ant-layout-sider-light,
 .layout-header-mix {
   .logo-text {
-    color: @primary-color;
+    color: theme('colors.textPrimary');
+    &:hover {
+      color: theme('colors.brand');
+    }
   }
 }
 
@@ -71,12 +74,6 @@ html.dark,
 .layout-header.dark {
   .logo-text {
     color: #fff;
-  }
-}
-
-.layout-sider.ant-layout-sider-collapsed {
-  .layout-logo {
-    padding: 16px 24px;
   }
 }
 </style>

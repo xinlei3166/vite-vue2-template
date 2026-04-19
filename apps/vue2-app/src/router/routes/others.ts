@@ -18,8 +18,7 @@ const routes: RouteConfig[] = [
         path: '',
         name: 'vue',
         meta: {
-          title: 'vue',
-          icon: 'icon-setting'
+          title: 'vue'
         },
         component: () => import('@/components/HelloWorld.vue')
       }

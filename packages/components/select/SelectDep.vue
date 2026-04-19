@@ -12,7 +12,7 @@
     @change="onChange"
   >
     <template #suffixIcon>
-      <Icon class="text-14 text-light" type="ios-arrow-down" />
+      <Icon class="text-14px text-light" type="ios-arrow-down" />
     </template>
   </t-tree-select>
 </template>

@@ -12,16 +12,17 @@ const Icon = defineComponent({
       default: `${import.meta.env.VITE_APP_BASE || '/'}iconfont.js`
     }
   },
-  setup(props, { attrs, listeners }) {
-    return () =>
-      h(IconFont, {
-        attrs: {
-          ...attrs,
-          url: props.url,
-          loadDefaultIcons: false
-        },
-        on: listeners
-      })
+  render() {
+    return h(IconFont, {
+      class: ['iconfont-icon'],
+      attrs: {
+        // @ts-ignore
+        url: this.url,
+        loadDefaultIcons: false,
+        ...this.$attrs
+      },
+      on: (this as any).$listeners
+    })
   }
 })
 

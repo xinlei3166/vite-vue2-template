@@ -1,96 +1,258 @@
 <template>
-  <component
-    :is="wrapper"
-    v-bind="wrapperProps"
-    :class="['search-wrap', { 'search-card': card }, $attrs.class]"
-  ></component>
+  <div
+    :class="[
+      'search-table-wrap',
+      { '!h-full': fixedPagination, '!h-auto': !fixedPagination, 'pb-4': !fixedPagination },
+      'flex',
+      '!flex-col',
+      $attrs.class
+    ]"
+    :style="$attrs.style"
+  >
+    <MaybeWrap :wrapper="wrapper" :wrapperProps="wrapperProps">
+      <Search
+        v-if="showSearch && searchColumns.length > 0"
+        v-bind="searchProps"
+        :card="false"
+        :style="{ marginBottom: '16px', ...(searchProps ? searchProps.style : {}) }"
+        :columns="searchColumns"
+        :model="searchModel"
+        @change="onSearchChange"
+        @search="onSearch"
+        @reset="onReset"
+        @enter="onEnter"
+      >
+        <template v-for="name in searchSlotNames" #[name]="slotProps">
+          <slot :name="name" v-bind="slotProps" />
+        </template>
+      </Search>
+      <t-table
+        v-bind="tableProps"
+        :class="['search-table', '!min-h-0', 'flex-1', tableProps.tableClass]"
+        :max-height="
+          tableProps.maxHeight ? tableProps.maxHeight : fixedPagination ? '100%' : undefined
+        "
+        :rowKey="rowKey"
+        :resizable="tableProps.resizable !== false"
+        :loading="loading"
+        :columns="tableColumns"
+        :pagination="fixedPagination ? undefined : pagination"
+        :data="data"
+        @change="onTableChange"
+      >
+        <template v-for="name in tableSlotNames" #[name]="slotProps">
+          <slot :name="name" v-bind="slotProps" />
+        </template>
+      </t-table>
+      <t-pagination
+        v-if="fixedPagination && pagination"
+        class="!my-4"
+        v-bind="pagination"
+        @change="onPaginationChange"
+      />
+    </MaybeWrap>
+  </div>
 </template>
 
 <script lang="ts">
+export default { inheritAttrs: false }
+</script>
+
+<script lang="ts" setup>
 import type { TableProps } from 'tdesign-vue'
-import type { PropType, CSSProperties } from 'vue'
-import { Card, Table, Pagination } from 'tdesign-vue'
-import { defineComponent } from 'vue'
-import { computed } from 'vue'
+import type { PropType, CSSProperties, ComputedRef } from 'vue'
+import { ref, computed, unref, toRefs, onBeforeMount, useAttrs } from 'vue'
 import { useData } from '@packages/hooks'
-import { typeOf } from '@packages/utils'
 import { deepClone } from '@packages/utils'
-import type Search from '../search/index.vue'
+import type { default as SearchType } from '../search/index.vue'
+import Search from '../search/index.vue'
+import MaybeWrap from '../wrap/MaybeWrap.vue'
 
-export type SearchProps = InstanceType<typeof Search>['$props']
+export type SearchProps = InstanceType<typeof SearchType>['$props'] & {
+  class?: string
+  style?: CSSProperties
+}
 
-export default defineComponent({
-  props: {
-    // table
-    card: { type: Boolean, default: true },
-    cardBordered: { type: Boolean, default: false },
-    cardBodyStyle: { type: Object as PropType<CSSProperties>, default: () => ({}) },
-    fixedPagination: { type: Boolean, default: true },
+// defineOptions({ inheritAttrs: false })
 
-    span: { type: Number, default: 6 },
-    searchClass: { type: String, default: '' },
-    searchStyle: { type: Object, default: () => ({}) },
-    columns: { type: Array as PropType<Array<Record<string, any>>>, default: () => [] },
-    model: { type: Object as PropType<Record<string, any>>, default: () => ({}) },
-    labelAlign: { type: String as PropType<any>, default: 'right' }, // left | right
-    labelWidth: { type: [String, Number], default: 'auto' },
-    showLabel: { type: Boolean, default: true }, // 显示label
-    showSearchBtn: { type: Boolean, default: true },
-    showResetBtn: { type: Boolean, default: true },
-    showBtn: { type: Boolean, default: true },
-    searchBtnLabel: { type: String, default: '查询' }, // 查询, 搜索
-    resetBtnLabel: { type: String, default: '重置' },
-    showBtnPlaceholder: { type: Boolean, default: false }, // 显示按钮placeholder
-    btnPlaceholderWidth: { type: [String, Number], default: undefined },
-    btnAlign: { type: String, default: 'start' }, // start/end
-    btnSpan: { type: Number, default: undefined },
-    btnClass: { type: String, default: '' },
-    btnStyle: { type: Object, default: () => ({}) },
-    btnInnerStyle: { type: Object, default: () => ({}) }
+const props = defineProps({
+  // table
+  card: { type: Boolean, default: true },
+  cardBordered: { type: Boolean, default: false },
+  cardBodyStyle: { type: Object as PropType<CSSProperties>, default: () => ({}) },
+  fixedPagination: { type: Boolean, default: true },
+  rowKey: { type: [String, Function] as PropType<TableProps['rowKey']>, default: 'id' },
+  tableColumns: { type: Array as PropType<TableProps['columns']>, default: () => [] },
+  pagination: { type: Object as PropType<TableProps['pagination'] | false>, default: undefined },
+
+  // search
+  showSearch: { type: Boolean, default: true },
+  searchProps: { type: Object as PropType<SearchProps>, default: () => ({}) },
+  searchColumns: { type: Array as PropType<Array<Record<string, any>>>, default: () => [] },
+  searchModel: { type: Object as PropType<Record<string, any>>, default: () => ({}) },
+
+  // method
+  extraParams: {
+    type: Object as PropType<ComputedRef<Record<string, any>> | Record<string, any>>,
+    default: () => ({})
   },
-  emits: ['search', 'reset', 'enter'],
-  setup(props, { emit }) {
-    const wrapper = computed(() => {
-      return props.card ? Card : 'div'
+  transformTableParams: {
+    type: Function as PropType<(...args: any[]) => Record<string, any>>,
+    default: () => {}
+  },
+  useDataParams: { type: Object as PropType<Record<string, any>>, default: () => ({}) },
+  requestApi: { type: Function as PropType<(...args: any[]) => Promise<any>>, required: true },
+  requestOnMount: { type: Boolean, default: true }, // 是否在组件挂载后自动请求数据，默认为 true
+  requestOnChange: { type: Boolean, default: true } // 是否在搜索条件改变时自动请求数据，默认为 false
+})
+
+const emit = defineEmits(['table-change', 'init', 'search', 'reset', 'enter'])
+const attrs = useAttrs()
+
+// slots
+const searchSlotNames = computed(() => {
+  return (props.searchColumns || []).map((item: any) => item.slot).filter(Boolean)
+})
+const tableSlotNames = computed(() => {
+  return (props.tableColumns || [])
+    .map((item: any) => {
+      if (item.cell && typeof item.cell === 'string') {
+        return item.cell
+      }
     })
+    .filter(Boolean)
+})
 
-    const wrapperProps = computed(() => {
-      return props.card
-        ? { bordered: props.cardBordered, bodyStyle: { padding: '16px', ...props.cardBodyStyle } }
-        : {}
-    })
+// props
+const {
+  searchModel,
+  pagination: _pagination,
+  transformTableParams: _transformTableParams,
+  useDataParams: _useDataParams
+} = toRefs(props)
 
-    const mergeColumnStyle = (...styles: any[]) => {
-      return Object.assign({}, props.componentStyle, ...styles.filter(Boolean))
-    }
-
-    const parseValue = (value: any, number: true) => {
-      return number ? parseInt(value) : value
-    }
-
-    const onSearch = () => {
-      emit('search')
-    }
-
-    const onReset = () => {
-      emit('reset')
-    }
-
-    const onEnter = (e: any, key: string) => {
-      emit('enter', key, e.target.value, { [key]: e.target.value })
-    }
-
+// wrapperProps
+const wrapper = computed(() => (props.card ? 'card' : undefined))
+const wrapperProps = computed(() => {
+  if (props.card) {
     return {
-      wrapper,
-      wrapperProps,
-      mergeColumnStyle,
-      onSearch,
-      onReset,
-      typeOf,
-      parseValue,
-      onEnter
+      class: ['search-table-card', { 'search-table-card--no-pagination': !pagination }, '!h-full'],
+      bordered: props.cardBordered,
+      bodyStyle: {
+        padding: pagination ? '16px 16px 0' : '16px',
+        height: '100%',
+        display: 'flex',
+        flexDirection: 'column',
+        ...props.cardBodyStyle
+      }
     }
   }
+  return {
+    style: { height: '100%', display: 'flex', flexDirection: 'column' }
+  }
+})
+
+// tableProps
+const tableProps = computed(() => {
+  const { class: _class, style: _style, ...rest } = attrs
+  return rest
+})
+
+// sorter, filter
+const sorter = ref()
+const filter = ref()
+const transformTableParams = (data: any) => {
+  // console.log('transformTableParams', data)
+  if (_transformTableParams.value) {
+    return _transformTableParams.value(data)
+  }
+  return {}
+}
+const tableParams = computed(() => {
+  return transformTableParams({ sorter: sorter.value, filter: filter.value })
+})
+
+// useData
+const params = computed(() => {
+  const extraParams = unref(props.extraParams)
+  return { ...searchModel.value, ...extraParams, ...tableParams.value }
+})
+
+const useDataParams = computed(() => {
+  const mergedParams = deepClone(_useDataParams.value || {})
+  if (_pagination.value !== undefined) {
+    mergedParams.pagination = _pagination.value
+  }
+  return { ...mergedParams, params }
+})
+
+const {
+  loading,
+  data,
+  pagination,
+  init: initMethod,
+  onSearch: onSearchMethod,
+  onTableChange: onTableChangeMethod
+} = useData(props.requestApi, useDataParams.value)
+
+const onTableChange = (data: any, context: any) => {
+  sorter.value = data.sorter
+  filter.value = data.filter
+  onTableChangeMethod(data, context)
+  emit('table-change', data, context)
+}
+
+const onPaginationChange = (pageInfo: any) => {
+  onTableChangeMethod({ pagination: pageInfo }, { trigger: 'pagination', currentData: [] })
+}
+
+// 方法回调
+const init = async () => {
+  await initMethod()
+  emit('init')
+}
+
+const onSearchChange = async () => {
+  if (props.requestOnChange) {
+    await initMethod()
+  }
+}
+
+const onSearch = async () => {
+  await onSearchMethod()
+  emit('search')
+}
+
+const onReset = async () => {
+  Object.keys(searchModel.value).forEach(key => {
+    searchModel.value[key] = undefined
+  })
+  await onSearchMethod()
+  emit('reset')
+}
+
+const onEnter = async (...args: any[]) => {
+  await initMethod()
+  emit('enter', ...args)
+}
+
+// 初始化
+onBeforeMount(() => {
+  if (props.requestOnMount) {
+    init()
+  }
+})
+
+// 将方法暴露给外部
+defineExpose({
+  init,
+  onSearch,
+  onReset,
+  onEnter,
+  searchModel,
+  pagination,
+  sorter,
+  filter
 })
 </script>
 

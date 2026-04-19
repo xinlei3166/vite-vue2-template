@@ -1,5 +1,5 @@
 <template>
-  <t-card class="card">
+  <t-card :bordered="false" class="card">
     <div class="title">Router</div>
     <div class="title" style="cursor: pointer" @click="onRedirect">点击跳转到首页</div>
   </t-card>

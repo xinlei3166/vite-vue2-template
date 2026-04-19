@@ -6,46 +6,46 @@
           <img class="login-title-img" src="@/assets/logo.png" />
           <span class="login-title-text">{{ title }}</span>
         </div>
-        <div class="text-text2 text-center mt-4 mb-12">
+        <div class="text-textSecondary text-center mt-4 mb-12">
           Vue 是一款非常流行的 JavaScript 前端框架
         </div>
         <t-form
           ref="formRef"
           class="login-form"
-          :model="form"
+          :data="form"
           :rules="rules"
           :colon="false"
-          :label-col="{ flex: '50px' }"
+          labelWidth="50px"
           label-align="right"
         >
           <t-form-item class="login-form-item" label="" name="account">
             <t-input
-              v-model:value.trim="form.account"
+              v-model.trim="form.account"
               size="large"
               :clearable="false"
               placeholder="账号：admin"
             >
-              <template #prefix>
-                <UserOutlined class="text-primary text-3.5" type="user" />
+              <template #prefix-icon>
+                <t-icon name="user" />
               </template>
             </t-input>
           </t-form-item>
           <t-form-item class="login-form-item" label="" name="password">
-            <t-input-password
-              v-model:value.trim="form.password"
-              size="large"
+            <t-input
               type="password"
+              v-model.trim="form.password"
+              size="large"
               :clearable="false"
               placeholder="密码：123456"
             >
-              <template #prefix>
-                <LockOutlined class="text-primary text-3.5" type="user" />
+              <template #prefix-icon>
+                <t-icon name="lock-on" />
               </template>
-            </t-input-password>
+            </t-input>
           </t-form-item>
           <t-form-item label="">
-            <t-checkbox v-model:checked="checked">自动登录</t-checkbox>
-            <a class="float-right text-btn" href="#">忘记密码</a>
+            <t-checkbox v-model="checked">自动登录</t-checkbox>
+            <a class="text-btn ml-auto" href="#">忘记密码</a>
           </t-form-item>
           <t-form-item class="login-form-btn-wrap" label="">
             <t-button
@@ -74,7 +74,6 @@
 
 <script setup lang="ts">
 // @ts-ignore
-import { UserOutlined, LockOutlined } from '@ant-design/icons-vue'
 import { MessagePlugin } from 'tdesign-vue'
 import { ref, reactive } from 'vue'
 import { useRouter, useRoute } from 'vue-router/composables'
@@ -126,7 +125,7 @@ const doLogin = async () => {
   await userStore.setPermissions()
   MessagePlugin.success({
     content: '登录成功',
-    duration: 1,
+    duration: 1000,
     onClose: () => {
       router
         .push({
@@ -140,11 +139,10 @@ const doLogin = async () => {
   })
 }
 
-const onSubmit = () => {
-  formRef.value.validate(async (valid: boolean) => {
-    if (!valid) return
-    await doLogin()
-  })
+const onSubmit = async () => {
+  const validateResult = await formRef.value.validate()
+  if (!validateResult) return
+  await doLogin()
 }
 </script>
 
@@ -218,7 +216,7 @@ const onSubmit = () => {
   }
 
   .link {
-    color: theme('colors.text2');
+    color: theme('colors.textSecondary');
     transition: all 0.3s;
     &:not(:last-of-type) {
       margin-right: 40px;
@@ -226,7 +224,7 @@ const onSubmit = () => {
   }
 
   .copyright {
-    color: theme('colors.text2');
+    color: theme('colors.textSecondary');
   }
 }
 </style>

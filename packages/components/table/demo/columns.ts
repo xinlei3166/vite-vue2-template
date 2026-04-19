@@ -1,5 +1,3 @@
-import { ref, reactive } from 'vue'
-
 export interface Options {
   label: string
   value: any
@@ -28,10 +26,11 @@ export const searchColumns = [
     searchType: 'select',
     key: 'name3',
     props: {
-      options: {
-        1: '玩游戏',
-        2: '听音乐'
-      },
+      options: [
+        { name: '玩游戏', codename: 1 },
+        { name: '听音乐', codename: 2 }
+      ],
+      keys: { label: 'name', value: 'codename' },
       placeholder: '请选择爱好'
     }
   },
@@ -51,22 +50,22 @@ export const searchColumns = [
     props: {
       data: [
         {
-          title: '北京',
+          label: '北京',
           value: 'bj',
           key: 'bj',
           children: [
             {
-              title: '北京市',
+              label: '北京市',
               value: 'bjs',
               key: 'bjs',
               children: [
                 {
-                  title: '东城区',
+                  label: '东城区',
                   value: 'dcq',
                   key: 'dcq'
                 },
                 {
-                  title: '西城区',
+                  label: '西城区',
                   value: 'xcq',
                   key: 'xcq'
                 }
@@ -153,11 +152,13 @@ export const tableColumns = [
   },
   {
     title: '姓名',
+    colKey: 'name',
     fixed: 'left'
   },
   {
     title: '年龄',
-    colKey: 'age'
+    colKey: 'age',
+    sorter: (a: Record<string, any>, b: Record<string, any>) => a.age - b.age
   },
   {
     title: '爱好',
@@ -179,6 +180,6 @@ export const tableColumns = [
     title: '操作',
     colKey: 'operation',
     fixed: 'right',
-    scopedSlots: { customRender: 'operation' }
+    cell: 'operation'
   }
 ]

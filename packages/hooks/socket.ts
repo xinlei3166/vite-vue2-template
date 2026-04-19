@@ -328,7 +328,7 @@ class MySocket {
     this.config.socketErrShow &&
       MessagePlugin.error({
         content: websocketMsg[key],
-        duration: 4
+        duration: 4000
       })
     removeToken()
     router.push('/login')

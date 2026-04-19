@@ -1,13 +1,13 @@
 import type { Ref, ComputedRef } from 'vue'
 import { MessagePlugin } from 'tdesign-vue'
-import { ref } from 'vue'
+import { ref, unref } from 'vue'
 import type { Pagination } from '@packages/types'
 import type { ExcelColumn } from '@packages/utils'
 import { useExcel } from './excel'
 import { usePagination } from './table'
 
 interface DataOptions {
-  params?: Record<string, any>
+  params?: ComputedRef<Record<string, any>> | Record<string, any>
   pagination?: Pagination | false
   callback?: ({ sourceData, data }: { sourceData: any; data: any }) => void
   dataKey?: any
@@ -47,7 +47,8 @@ export function useData(
     loading.value = true
     const page = pagination ? pag.current : undefined
     const pageSize = pagination ? pag.pageSize : undefined
-    let mergedParams = { page_size: pageSize, page, ...params?.value, ..._params }
+    const rawParams = unref(params)
+    let mergedParams: Record<string, any> = { page_size: pageSize, page, ...rawParams, ..._params }
     if (method === 'get') {
       mergedParams = { params: mergedParams }
     }
@@ -69,28 +70,24 @@ export function useData(
     pag.current = 1
     await init(_params)
   }
-  const onReset = async (_params: Record<string, any> = {}) => {
-    await onSearch()
-  }
 
-  async function onTableChange(data: any, context: any, overrideParams: Record<string, any> = {}) {
-    console.log('onTableChange', { data, context, overrideParams })
+  async function onTableChange(data: any, context: any, _params: Record<string, any> = {}) {
+    console.log('onTableChange', { data, context, _params })
     const { pagination } = data
     if (pagination) {
       pag.current = pagination.current
       pag.pageSize = pagination.pageSize
     }
-    await init({ ...overrideParams })
+    await init({ ..._params })
   }
 
   return {
     loading,
     sourceData,
     data,
-    pagination: pag,
+    pagination: pagination === false ? undefined : pag,
     init,
     onSearch,
-    onReset,
     onTableChange
   }
 }
@@ -130,7 +127,8 @@ export function useExport(
 ) {
   const getExcelData = async (downloadLoading: Ref<boolean>) => {
     downloadLoading.value = true
-    const res = await api({ params: params?.value })
+    const rawParams = unref(params)
+    const res = await api({ params: rawParams })
     downloadLoading.value = false
     if (!res || res[codeKey] !== successCode) return
     const data = ref([])

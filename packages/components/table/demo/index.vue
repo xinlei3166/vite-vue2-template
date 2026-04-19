@@ -1,55 +1,40 @@
 <template>
-  <Search
-    :columns="searchColumns"
-    :model="search"
-    label-width="42px"
-    :show-reset-btn="true"
-    style="margin-bottom: 16px"
-    @search="onSearch"
+  <SearchTable
+    :card="true"
+    :fixedPagination="true"
+    requestOnChange
+    :transformTableParams="transformTableParams"
+    ref="tableRef"
+    :searchColumns="searchColumns"
+    :searchModel="search"
+    :tableColumns="tableColumns"
+    :requestApi="getList"
+    :extraParams="extraParams"
     @reset="onReset"
   >
     <template #name6>
       <t-select v-model="search.name6" class="w-full" :clearable="true" placeholder="请选择课性别">
-        <t-select-option value="male">男</t-select-option>
-        <t-select-option value="female">女</t-select-option>
+        <t-option value="male">男</t-option>
+        <t-option value="female">女</t-option>
       </t-select>
     </template>
-  </Search>
-  <t-card class="card">
-    <t-table
-      class="content"
-      row-key="id"
-      :loading="loading"
-      :data="data"
-      :columns="tableColumns"
-      :pagination="pagination"
-      @change="onTableChange"
-    >
-      <template #operation="{ record }">
-        <t-link hover="color" class="t-text-btn" @click="onEdit(record)">编辑</t-link>
-        <t-link hover="color" class="t-text-btn" @click="onPreview(record)">预览</t-link>
-      </template>
-    </t-table>
-  </t-card>
+    <template #operation="{ record }">
+      <t-link theme="primary" hover="color" class="t-text-btn" @click="onEdit(record)">编辑</t-link>
+      <t-link theme="primary" hover="color" class="t-text-btn" @click="onPreview(record)">
+        预览
+      </t-link>
+    </template>
+  </SearchTable>
 </template>
 
 <script lang="ts" setup>
-import { defineComponent, onBeforeMount, reactive, computed } from 'vue'
-import { useData } from '@packages/hooks'
+import type { TableChangeData, SortInfo } from 'tdesign-vue'
+import { onBeforeMount, reactive, computed } from 'vue'
 // @ts-ignore
-import { getData } from '@/api'
+import { getList } from '@/api'
 import { searchColumns, tableColumns } from './columns'
 
-const params = computed(() => ({
-  ...search
-}))
-const { loading, data, pagination, init, onSearch, onTableChange } = useData(getData, {
-  params
-})
-
-onBeforeMount(async () => {
-  await init()
-})
+onBeforeMount(async () => {})
 
 const search = reactive<Record<string, any>>({
   name1: undefined,
@@ -64,17 +49,29 @@ const search = reactive<Record<string, any>>({
   name10: undefined
 })
 
-const onReset = async () => {
-  Object.keys(search).forEach(key => (search[key] = undefined))
-  pagination.current = 1
-  await init()
+const extraParams = computed(() => ({
+  extraParams1: 'test'
+}))
+
+const transformTableParams = (data: TableChangeData) => {
+  const sorter = data.sorter as SortInfo
+  const sortBy = sorter?.sortBy
+    ? sorter.descending
+      ? `-${sorter.sortBy}`
+      : sorter.sortBy
+    : undefined
+  return { sortBy }
 }
 
-const onEdit = () => {
+const onReset = () => {
+  console.log('onReset')
+}
+
+const onEdit = (record: Record<string, any>) => {
   window.open('https://baidu.com')
 }
 
-const onPreview = () => {
+const onPreview = (record: Record<string, any>) => {
   window.open('https://baidu.com')
 }
 </script>
@@ -85,7 +82,7 @@ const onPreview = () => {
 }
 
 .btn {
-  color: theme('colors.primary');
+  color: theme('colors.brand');
   margin-right: 10px;
   cursor: pointer;
 }

@@ -1,5 +1,5 @@
-import { useMenuStore } from '@/store/menu'
 import type { RouteConfig } from 'vue-router'
+import { useMenuStore } from '@/store/menu'
 
 const Layout = () => import('@/components/layout/index.vue')
 

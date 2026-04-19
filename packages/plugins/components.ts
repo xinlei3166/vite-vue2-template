@@ -1,6 +1,6 @@
 import Phone from '@packages/components/phone/index.vue'
 import Search from '@packages/components/search/index.vue'
-import SearchTable from '@packages/components/table/index.vue'
+import SearchTable from '@packages/components/table'
 
 export default {
   install: (app: any) => {

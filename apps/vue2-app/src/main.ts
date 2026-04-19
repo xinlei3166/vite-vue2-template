@@ -1,5 +1,6 @@
 import { createPinia, PiniaVuePlugin } from 'pinia'
 import persistedState from 'pinia-plugin-persistedstate'
+import TDesign from 'tdesign-vue'
 import Vue from 'vue'
 import VueRouter from 'vue-router'
 import plugins from '@packages/plugins'
@@ -15,6 +16,9 @@ import './mock'
 
 function createApp() {
   const app = Vue
+
+  // 按需加载没生效，先全局引入
+  app.use(TDesign)
 
   app.use(PiniaVuePlugin)
   const pinia = createPinia()
