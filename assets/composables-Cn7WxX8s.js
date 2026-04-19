@@ -1,0 +1,1 @@
+import{C as e,a as t,i as n}from"./vue.esm-Y4W1Lsp4.js";function r(){return t().proxy.$root.$router}function i(){var r=t().proxy.$root;if(!r._$route){var i=n(!0).run(function(){return e(Object.assign({},r.$router.currentRoute))});r._$route=i,r.$router.afterEach(function(e){Object.assign(i,e)})}return r._$route}export{r as n,i as t};

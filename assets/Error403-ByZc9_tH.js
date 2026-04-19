@@ -1,0 +1,1 @@
+import{r as e}from"./es-wFrVwtCF.js";import{s as t}from"./vue.esm-Y4W1Lsp4.js";function n(){return t(e,{attrs:{bordered:!1},class:`exception-wrap`},[t(`div`,{class:`exception-img-wrap`},[t(`img`,{class:`exception-img`,attrs:{src:`@/assets/exception/web-exception.svg`}}),t(`span`,{class:`exception-desc`},[`抱歉，您没有被授权菜单权限，如有权限需求请联系管理员为您添加权限`])])])}export{n as default};
