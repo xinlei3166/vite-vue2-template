@@ -1,6 +1,12 @@
-import type { UploadProps, UploadFile } from 'tdesign-vue'
+import type { UploadProps, UploadFile, RequestMethodResponse } from 'tdesign-vue'
 import { MessagePlugin } from 'tdesign-vue'
 import { ref } from 'vue'
+import { ContentTypeEnum } from '@packages/types/enums'
+
+const uploadFile = async (...args: any[]) => {
+  console.log('args', args)
+  return { code: 0, msg: '', data: {} } as Record<string, any>
+}
 
 export interface UploadConfig {
   upload?: boolean
@@ -59,11 +65,11 @@ export function useUpload({ maxCount, maxSize, accept, upload = true }: UploadCo
     //   .then(() => {
     //     fileList.value = []
     //     uploading.value = false
-    //     MessagePlugin.success('upload successfully.')
+    //     MessagePlugin.success('上传成功')
     //   })
     //   .catch(() => {
     //     uploading.value = false
-    //     MessagePlugin.error('upload failed.')
+    //     MessagePlugin.error('上传失败')
     //   })
   }
 
@@ -71,7 +77,8 @@ export function useUpload({ maxCount, maxSize, accept, upload = true }: UploadCo
     getParams: () => Record<string, any> = () => ({})
   ): UploadProps['requestMethod'] => {
     return async fileOrFiles => {
-      const file = Array.isArray(fileOrFiles) ? fileOrFiles[0] : fileOrFiles
+      const files = Array.isArray(fileOrFiles) ? fileOrFiles : [fileOrFiles]
+      const file = files[0]
 
       // 1. 构造上传参数
       const formData = new FormData()
@@ -106,10 +113,22 @@ export function useUpload({ maxCount, maxSize, accept, upload = true }: UploadCo
 
         // MessagePlugin.success('上传成功')
         // 关键：返回给 TDesign 的结果
-        return { status: 'success', response: { ...res.data, url: res.data?.url } }
+        const successResponse: RequestMethodResponse = {
+          status: 'success',
+          response: { ...res.data, url: res.data?.url, files }
+        }
+        console.log('requestMethod success', successResponse)
+        return successResponse
       } catch (err: any) {
-        MessagePlugin.error(`上传失败: ${err.message}`)
-        return { status: 'fail', error: err, response: err }
+        const errorMessage = `上传失败: ${err.message}`
+        MessagePlugin.error(errorMessage)
+        const failResponse: RequestMethodResponse = {
+          status: 'fail',
+          error: errorMessage,
+          response: { files }
+        }
+        console.error('requestMethod error', err, failResponse)
+        return failResponse
       }
     }
   }
