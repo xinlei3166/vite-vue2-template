@@ -110,7 +110,7 @@
             <t-button v-if="showSearchBtn" class="search-btn-btn" theme="primary" @click="onSearch">
               {{ searchBtnLabel }}
             </t-button>
-            <t-button v-if="showResetBtn" class="search-btn-btn" @click="onReset">
+            <t-button v-if="showResetBtn" class="search-btn-btn" theme="default" @click="onReset">
               {{ resetBtnLabel }}
             </t-button>
             <slot name="extra-btn" />

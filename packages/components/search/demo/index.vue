@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="pb-4">
     <Search
       :columns="searchColumns"
       :model="search"
@@ -10,12 +10,7 @@
       @reset="onReset"
     >
       <template #name6>
-        <t-select
-          v-model="search.name6"
-          class="w-full"
-          :clearable="true"
-          placeholder="请选择课性别"
-        >
+        <t-select v-model="search.name6" class="w-full" :clearable="true" placeholder="请选择性别">
           <t-option value="male">男</t-option>
           <t-option value="female">女</t-option>
         </t-select>
@@ -47,18 +42,43 @@
 </template>
 
 <script lang="ts" setup>
-import { defineComponent, onBeforeMount, reactive, computed } from 'vue'
+import type { TableChangeData, SortInfo } from 'tdesign-vue'
+import { onBeforeMount, reactive, computed, ref } from 'vue'
 import { useData } from '@packages/hooks'
 // @ts-ignore
 import { getList } from '@/api'
 import { searchColumns, tableColumns } from './columns'
 
 const params = computed(() => ({
-  ...search
+  ...search,
+  ...transformTableParams({ sorter: sorter.value })
 }))
-const { loading, data, pagination, init, onSearch, onTableChange } = useData(getList, {
+const {
+  loading,
+  data,
+  pagination,
+  init,
+  onSearch,
+  onTableChange: _onTableChange
+} = useData(getList, {
   params
 })
+
+const transformTableParams = (data: TableChangeData) => {
+  const sorter = data.sorter as SortInfo
+  const sortBy = sorter?.sortBy
+    ? sorter.descending
+      ? `-${sorter.sortBy}`
+      : sorter.sortBy
+    : undefined
+  return { sortBy }
+}
+
+const sorter = ref()
+const onTableChange = (data: any, context: any) => {
+  sorter.value = data.sorter
+  _onTableChange(data, context)
+}
 
 onBeforeMount(async () => {
   await init()
@@ -74,11 +94,12 @@ const search = reactive<Record<string, any>>({
   name7: undefined,
   name8: undefined,
   name9: undefined,
-  name10: undefined
+  name10: []
 })
 
 const onReset = async () => {
   Object.keys(search).forEach(key => (search[key] = undefined))
+  search['name10'] = []
   if (pagination) {
     pagination.current = 1
   }
@@ -100,6 +121,9 @@ const onPreview = (record: Record<string, any>) => {
   :deep(.t-card__body) {
     padding: 16px 16px 0;
   }
+}
+:deep(.search-card .t-card__body) {
+  padding: 16px;
 }
 
 .btn {

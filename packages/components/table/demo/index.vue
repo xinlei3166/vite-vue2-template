@@ -3,10 +3,12 @@
     :card="true"
     :fixedPagination="true"
     requestOnChange
-    :transformTableParams="transformTableParams"
+    transformTableParams
     ref="tableRef"
     :searchColumns="searchColumns"
     :searchModel="search"
+    search-label-width="42px"
+    :search-show-reset-btn="true"
     :tableColumns="tableColumns"
     :requestApi="getList"
     :extraParams="extraParams"
@@ -28,7 +30,6 @@
 </template>
 
 <script lang="ts" setup>
-import type { TableChangeData, SortInfo } from 'tdesign-vue'
 import { onBeforeMount, reactive, computed } from 'vue'
 // @ts-ignore
 import { getList } from '@/api'
@@ -46,22 +47,12 @@ const search = reactive<Record<string, any>>({
   name7: undefined,
   name8: undefined,
   name9: undefined,
-  name10: undefined
+  name10: []
 })
 
 const extraParams = computed(() => ({
   extraParams1: 'test'
 }))
-
-const transformTableParams = (data: TableChangeData) => {
-  const sorter = data.sorter as SortInfo
-  const sortBy = sorter?.sortBy
-    ? sorter.descending
-      ? `-${sorter.sortBy}`
-      : sorter.sortBy
-    : undefined
-  return { sortBy }
-}
 
 const onReset = () => {
   console.log('onReset')

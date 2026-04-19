@@ -14,7 +14,7 @@
         v-if="showSearch && searchColumns.length > 0"
         v-bind="searchProps"
         :card="false"
-        :style="{ marginBottom: '16px', ...(searchProps ? searchProps.style : {}) }"
+        :style="{ marginBottom: '16px', ...searchProps.style }"
         :columns="searchColumns"
         :model="searchModel"
         @change="onSearchChange"
@@ -59,7 +59,7 @@ export default { inheritAttrs: false }
 </script>
 
 <script lang="ts" setup>
-import type { TableProps } from 'tdesign-vue'
+import type { TableProps, TableChangeData, SortInfo } from 'tdesign-vue'
 import type { PropType, CSSProperties, ComputedRef } from 'vue'
 import { ref, computed, unref, toRefs, onBeforeMount, useAttrs } from 'vue'
 import { useData } from '@packages/hooks'
@@ -90,6 +90,11 @@ const props = defineProps({
   searchProps: { type: Object as PropType<SearchProps>, default: () => ({}) },
   searchColumns: { type: Array as PropType<Array<Record<string, any>>>, default: () => [] },
   searchModel: { type: Object as PropType<Record<string, any>>, default: () => ({}) },
+  searchLabelWidth: {
+    type: [String, Number] as PropType<SearchProps['labelWidth']>,
+    default: undefined
+  },
+  searchShowResetBtn: { type: Boolean as PropType<SearchProps['showResetBtn']>, default: true },
 
   // method
   extraParams: {
@@ -97,7 +102,7 @@ const props = defineProps({
     default: () => ({})
   },
   transformTableParams: {
-    type: Function as PropType<(...args: any[]) => Record<string, any>>,
+    type: [Function, Boolean] as PropType<((...args: any[]) => Record<string, any>) | true>,
     default: () => {}
   },
   useDataParams: { type: Object as PropType<Record<string, any>>, default: () => ({}) },
@@ -130,6 +135,11 @@ const {
   transformTableParams: _transformTableParams,
   useDataParams: _useDataParams
 } = toRefs(props)
+const searchProps = computed(() => ({
+  labelWidth: props.searchLabelWidth,
+  showResetBtn: props.searchShowResetBtn,
+  ...props.searchProps
+}))
 
 // wrapperProps
 const wrapper = computed(() => (props.card ? 'card' : undefined))
@@ -161,12 +171,24 @@ const tableProps = computed(() => {
 // sorter, filter
 const sorter = ref()
 const filter = ref()
+const defaultTransformTableParams = (data: TableChangeData) => {
+  const sorter = data.sorter as SortInfo
+  const sortBy = sorter?.sortBy
+    ? sorter.descending
+      ? `-${sorter.sortBy}`
+      : sorter.sortBy
+    : undefined
+  return { sortBy }
+}
 const transformTableParams = (data: any) => {
-  // console.log('transformTableParams', data)
-  if (_transformTableParams.value) {
+  // console.log('transformTableParams', typeof _transformTableParams.value, data)
+  if (_transformTableParams.value === true) {
+    return defaultTransformTableParams(data)
+  } else if (typeof _transformTableParams.value === 'function') {
     return _transformTableParams.value(data)
+  } else {
+    return {}
   }
-  return {}
 }
 const tableParams = computed(() => {
   return transformTableParams({ sorter: sorter.value, filter: filter.value })
@@ -225,7 +247,11 @@ const onSearch = async () => {
 
 const onReset = async () => {
   Object.keys(searchModel.value).forEach(key => {
-    searchModel.value[key] = undefined
+    if (Array.isArray(searchModel.value[key])) {
+      searchModel.value[key] = []
+    } else {
+      searchModel.value[key] = undefined
+    }
   })
   await onSearchMethod()
   emit('reset')

@@ -141,7 +141,7 @@ const doLogin = async () => {
 
 const onSubmit = async () => {
   const validateResult = await formRef.value.validate()
-  if (!validateResult) return
+  if (validateResult !== true) return
   await doLogin()
 }
 </script>
