@@ -1,13 +1,13 @@
 <template>
-  <t-config-provider :locale="locale">
+  <t-config-provider :global-config="globalConfig">
     <router-view />
   </t-config-provider>
 </template>
 
 <script lang="ts">
+import type { GlobalConfigProvider } from 'tdesign-vue'
 import dayjs from 'dayjs'
-// @ts-ignore
-import zhCN from 'tdesign-vue/es/locale/zh_CN'
+import zhConfig from 'tdesign-vue/es/locale/zh_CN'
 import { computed, defineComponent, onMounted } from 'vue'
 import { useRouter } from 'vue-router/composables'
 import { getToken } from '@packages/utils'
@@ -41,7 +41,9 @@ export default defineComponent({
       }
     })
 
-    return { locale: zhCN }
+    const globalConfig: GlobalConfigProvider = zhConfig as any
+
+    return { globalConfig }
   }
 })
 </script>
