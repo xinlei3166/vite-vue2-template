@@ -1,8 +1,3 @@
-export interface Options {
-  label: string
-  value: any
-}
-
 export const searchColumns = [
   {
     label: '姓名',

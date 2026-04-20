@@ -1,7 +1,7 @@
 <template>
   <div class="column-wrap-phone flex items-center">
     <div :class="['phone-wrap', { loading }]" :style="{ minWidth: minWidth }">
-      <t-spin v-if="loading" />
+      <t-loading v-if="loading" />
       <span v-else>{{ computedPhone }}</span>
     </div>
     <slot v-if="phone" name="extra"></slot>

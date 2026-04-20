@@ -125,10 +125,4 @@ const onPreview = (record: Record<string, any>) => {
 :deep(.search-card .t-card__body) {
   padding: 16px;
 }
-
-.btn {
-  color: theme('colors.brand');
-  margin-right: 10px;
-  cursor: pointer;
-}
 </style>

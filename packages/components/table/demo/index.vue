@@ -67,14 +67,4 @@ const onPreview = (record: Record<string, any>) => {
 }
 </script>
 
-<style lang="less" scoped>
-.card {
-  min-height: 0;
-}
-
-.btn {
-  color: theme('colors.brand');
-  margin-right: 10px;
-  cursor: pointer;
-}
-</style>
+<style lang="less" scoped></style>

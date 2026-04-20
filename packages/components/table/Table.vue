@@ -34,6 +34,7 @@
         "
         :rowKey="rowKey"
         :resizable="tableProps.resizable !== false"
+        :hover="tableProps.hover !== false"
         :loading="loading"
         :columns="tableColumns"
         :pagination="fixedPagination ? undefined : pagination"
@@ -61,6 +62,7 @@ export default { inheritAttrs: false }
 <script lang="ts" setup>
 import type { TableProps, TableChangeData, SortInfo } from 'tdesign-vue'
 import type { PropType, CSSProperties, ComputedRef } from 'vue'
+import { useDebounceFn } from '@vueuse/core'
 import { ref, computed, unref, toRefs, onBeforeMount, useAttrs } from 'vue'
 import { useData } from '@packages/hooks'
 import { deepClone } from '@packages/utils'
@@ -202,7 +204,7 @@ const params = computed(() => {
 
 const useDataParams = computed(() => {
   const mergedParams = deepClone(_useDataParams.value || {})
-  if (_pagination.value !== undefined) {
+  if (_pagination?.value !== undefined) {
     mergedParams.pagination = _pagination.value
   }
   return { ...mergedParams, params }
@@ -234,11 +236,11 @@ const init = async () => {
   emit('init')
 }
 
-const onSearchChange = async () => {
+const onSearchChange = useDebounceFn(async () => {
   if (props.requestOnChange) {
     await initMethod()
   }
-}
+}, 300)
 
 const onSearch = async () => {
   await onSearchMethod()
