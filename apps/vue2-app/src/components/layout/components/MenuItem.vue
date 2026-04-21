@@ -48,6 +48,5 @@ export default defineComponent({
   // vertical-align: -0.2em !important;
   width: 16px !important;
   height: 16px !important;
-  color: var(--td-text-color-primary);
 }
 </style>
