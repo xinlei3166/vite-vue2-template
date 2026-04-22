@@ -1,1 +1,0 @@
-import{x as e}from"./vue.esm-Y4W1Lsp4.js";var t=e({theme:`light`,layout:`mix`,expandType:`normal`,width:`240px`,height:`56px`,collapsed:!1,collapsedWidth:`64px`,headerTheme:!1,showBreadcrumb:!0,themeColor:`#0077fa`}),n=function(){return t};export{n as t};

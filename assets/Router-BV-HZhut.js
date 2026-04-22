@@ -1,0 +1,1 @@
+import{r as e}from"./vue.esm-Y4W1Lsp4.js";import{s as t}from"./index-48RqpSD3.js";var n=t(e({__name:`Router`,setup(e){return{__sfc:!0}}}),function(){var e=this,t=e._self._c;return e._self._setupProxy,t(`router-view`)},[],!1,null,`baa50c63`,null,null).exports;export{n as default};
