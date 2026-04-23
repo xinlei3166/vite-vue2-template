@@ -68,9 +68,8 @@ export default { inheritAttrs: false }
 
 <script lang="ts" setup>
 import type { TableProps, TableChangeData, SortInfo } from 'tdesign-vue'
-import type { PropType, CSSProperties, ComputedRef } from 'vue'
-import { useDebounceFn } from '@vueuse/core'
-import { ref, computed, unref, toRefs, onBeforeMount, useAttrs } from 'vue'
+import type { PropType, CSSProperties } from 'vue'
+import { ref, computed, toRefs, onBeforeMount, useAttrs } from 'vue'
 import { useData } from '@packages/hooks'
 import { deepClone } from '@packages/utils'
 import type { default as SearchType } from '../search/index.vue'
@@ -110,7 +109,7 @@ const props = defineProps({
 
   // method
   extraParams: {
-    type: Object as PropType<ComputedRef<Record<string, any>> | Record<string, any>>,
+    type: Object as PropType<Record<string, any>>,
     default: () => ({})
   },
   transformTableParams: {
@@ -154,6 +153,7 @@ const tableSlotNames = computed(() => {
 // props
 const {
   searchModel,
+  extraParams,
   pagination: _pagination,
   transformTableParams: _transformTableParams,
   useDataParams: _useDataParams
@@ -230,8 +230,7 @@ const tableParams = computed(() => {
 
 // useData
 const params = computed(() => {
-  const extraParams = unref(props.extraParams)
-  return { ...searchModel.value, ...extraParams, ...tableParams.value }
+  return { ...searchModel.value, ...extraParams.value, ...tableParams.value }
 })
 
 const useDataParams = computed(() => {
