@@ -1,0 +1,1 @@
+import{s as e}from"./vue.esm-Y4W1Lsp4.js";import{s as t}from"./es-7dFtgs4S.js";import{a as n}from"./index-DDxFp3p5.js";function r(){let r=n();return e(t,{attrs:{theme:`primary`},on:{click:()=>{r.push(`/`)}}},[`回到首页`])}export{r as t};
